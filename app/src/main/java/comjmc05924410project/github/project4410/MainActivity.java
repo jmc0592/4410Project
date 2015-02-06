@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import android.os.Build;
 
 
@@ -23,6 +26,17 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+
+        Parse.initialize(this, "bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf", "jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC");
+
+        //test data
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
+
     }
 
 
