@@ -1,7 +1,8 @@
 package comjmc05924410project.github.project4410;
 
+import android.app.Activity;
+import android.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.parse.Parse;
 import com.parse.ParseObject;
-
 import android.os.Build;
 
 
 public class MainActivity extends ActionBarActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,10 @@ public class MainActivity extends ActionBarActivity {
         Parse.initialize(this, "bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf", "jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC");
 
         //test data
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+        //uncomment to test this to see if it sends data to Parse.com, you need internet connection clearly
+        //ParseObject testObject = new ParseObject("TestObject");
+        //testObject.put("foo", "bar");
+        //testObject.saveInBackground();
 
     }
 
