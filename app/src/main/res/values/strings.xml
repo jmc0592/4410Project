@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Project4410</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Welcome to ShopBroker!</string>
     <string name="action_settings">Settings</string>
 
 </resources>
