@@ -1,7 +1,7 @@
 package com.example.shopbroker;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -13,10 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 
 public class ListActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    DBAdapter myDb;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -41,7 +45,22 @@ public class ListActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        
+        openDB();
+
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        closeDB();
+    }
+
+    private void displayText(String message) {
+        TextView textView = (TextView) findViewById(R.id.textDisplay);
+        textView.setText(message);
+    }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -118,9 +137,20 @@ public class ListActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void openDB(){
+        myDb = new DBAdapter(this);
+        myDb.open();
+    }
+
+    private void closeDB() {
+        myDb.close();
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
+
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
@@ -157,6 +187,48 @@ public class ListActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    /* called when button is pressed*/
+    public void onClick_AddList(View v){
+        displayText("Clicked add List");
+
+        long newId = myDb.insertRow("<List Name>",987,"<Date>");
+        //Query for record added
+        Cursor cursor = myDb.getRow(newId);
+        displayRecordset(cursor);
+    }
+    public void onClick_ClearAll(View v){
+        displayText("Clicked clear all");
+        myDb.deleteAll();
+    }
+    public void onClick_DisplayLists(View v){
+        displayText("Clicked display lists");
+        Cursor cursor = myDb.getAllRows();
+        displayRecordset(cursor);
+    }
+
+    /*Display entire record set*/
+    private void displayRecordset(Cursor cursor) {
+        String message = "";
+
+        if(cursor.moveToFirst()){
+            //process the data
+            do {
+                int id = cursor.getInt(DBAdapter.COL_ROWID);
+                String name = cursor.getString(DBAdapter.COL_NAME);
+                int studentNumber = cursor.getInt(DBAdapter.COL_STUDENTNUM);
+                String dateAdded = cursor.getString(DBAdapter.COL_DATEADDED);
+
+                //append data to message
+                message += "id=" + id
+                        +" "+ name
+                        +"  Date added: " + dateAdded
+                        + "\n";
+            }while(cursor.moveToNext());
+        }
+        displayText(message);
+    }
+
 
     public static class FriendsFragment extends Fragment {
         /**
