@@ -11,11 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-
-public class PlaceholderFragment extends Fragment {
+public class ListsFragment extends Fragment {
+    /**
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -29,8 +26,8 @@ public class PlaceholderFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static ListsFragment newInstance(int sectionNumber) {
+        ListsFragment fragment = new ListsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -43,7 +40,7 @@ public class PlaceholderFragment extends Fragment {
         //closeDB();
     }
 
-    public PlaceholderFragment() {
+    public ListsFragment() {
     }
 
     //called to "inflate"/display layout file
@@ -60,7 +57,7 @@ public class PlaceholderFragment extends Fragment {
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
-/*
+
     public void openDB(){
         myDb = new DBAdapter(ctx);
         myDb.open();
@@ -69,8 +66,8 @@ public class PlaceholderFragment extends Fragment {
     private void closeDB() {
         myDb.close();
     }
-    */
-/*
+
+
     // called when button is pressed
     public void onClick_AddList(View v){
         listAc.displayText("Clicked add List");
@@ -82,12 +79,12 @@ public class PlaceholderFragment extends Fragment {
     }
     public void onClick_ClearAll(View v){
         listAc.displayText("Clicked clear all");
-       //myDb.deleteAll();
+        myDb.deleteAll();
     }
     public void onClick_DisplayLists(View v){
         listAc.displayText("Clicked display lists");
-        //Cursor cursor = myDb.getAllRows();
-        //displayRecordset(cursor);
+        Cursor cursor = myDb.getAllRows();
+        displayRecordset(cursor);
     }
 
     //Display entire record set
@@ -111,5 +108,5 @@ public class PlaceholderFragment extends Fragment {
         }
         listAc.displayText(message);
     }
-*/
+
 }

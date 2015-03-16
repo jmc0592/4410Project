@@ -67,7 +67,7 @@ public class ListActivity extends ActionBarActivity
 
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .replace(R.id.container, ListsFragment.newInstance(position + 1))
                         .commit();
                 break;
             case 1:
@@ -133,7 +133,7 @@ public class ListActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
+/*
     private void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
@@ -142,7 +142,7 @@ public class ListActivity extends ActionBarActivity
     private void closeDB() {
         myDb.close();
     }
-
+*/
     // called when button is pressed
     public void onClick_AddList(View v){
         displayText("Clicked add List");
