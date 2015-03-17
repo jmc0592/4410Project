@@ -1,5 +1,6 @@
 package com.example.shopbroker;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -151,6 +152,8 @@ public class ListActivity extends ActionBarActivity
         //Query for record added
       //  Cursor cursor = myDb.getRow(newId);
       //  displayRecordset(cursor);
+        Intent intent = new Intent(this, CreateListActivity.class);
+        startActivity(intent);
 
     }
     public void onClick_ClearAll(View v){

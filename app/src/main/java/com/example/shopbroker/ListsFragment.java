@@ -2,6 +2,7 @@ package com.example.shopbroker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -57,7 +58,8 @@ public class ListsFragment extends Fragment {
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
-
+/*
+ *in main for now
     public void openDB(){
         myDb = new DBAdapter(ctx);
         myDb.open();
@@ -70,12 +72,12 @@ public class ListsFragment extends Fragment {
 
     // called when button is pressed
     public void onClick_AddList(View v){
-        listAc.displayText("Clicked add List");
+        //listAc.displayText("Clicked add List");
 
-        long newId = myDb.insertRow("<List Name>",987,"<Date>");
+        //long newId = myDb.insertRow("<List Name>",987,"<Date>");
         //Query for record added
-        Cursor cursor = myDb.getRow(newId);
-        displayRecordset(cursor);
+        //Cursor cursor = myDb.getRow(newId);
+        //displayRecordset(cursor);
     }
     public void onClick_ClearAll(View v){
         listAc.displayText("Clicked clear all");
@@ -108,5 +110,5 @@ public class ListsFragment extends Fragment {
         }
         listAc.displayText(message);
     }
-
+*/
 }
