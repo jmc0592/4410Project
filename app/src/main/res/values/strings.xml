@@ -16,5 +16,10 @@
     <string name="shared">Shared</string>
     <string name="mine">Mine</string>
     <string name="total">Total:</string>
+    <string-array name="testList">
+        <item>Party</item>
+        <item>MoveIn</item>
+        <item>Groceries</item>
+    </string-array>
 
 </resources>

@@ -43,7 +43,6 @@
         android:id="@+id/totalNumeric"
         android:text="0.00"
         android:gravity="center"
-        android:inputType="none"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/totalText"
         android:layout_toEndOf="@+id/totalText" />

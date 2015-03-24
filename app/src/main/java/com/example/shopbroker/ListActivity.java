@@ -51,6 +51,7 @@ public class ListActivity extends ActionBarActivity
         closeDB();
     }
 */
+
     public void displayText(String message) {
         TextView textView = (TextView) findViewById(R.id.textDisplay);
         textView.setText(message);
