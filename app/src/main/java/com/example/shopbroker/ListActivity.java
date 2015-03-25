@@ -41,22 +41,9 @@ public class ListActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         
-        //openDB();
+        openDB();
 
     }
-/*
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        closeDB();
-    }
-*/
-
-    public void displayText(String message) {
-        TextView textView = (TextView) findViewById(R.id.textDisplay);
-        textView.setText(message);
-    }
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -83,6 +70,7 @@ public class ListActivity extends ActionBarActivity
                         .commit();
                 break;
         }
+        //displayrecord();
     }
 
     //get title for menu based on nav drawer selection
@@ -135,7 +123,33 @@ public class ListActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-/*
+    // called when button is pressed
+    public void onClick_AddList(View v){
+        displayText("Clicked add List");
+
+        long newId = myDb.insertRow("<List",987,"<Date>");
+        //Query for record added
+        //Cursor cursor = myDb.getRow(newId);
+        //displayRecordset(cursor);
+        //Intent intent = new Intent(this, CreateListActivity.class);
+        //startActivity(intent);
+    }
+    public void onClick_ClearAll(View v){
+        displayText("Clicked clear all");
+        myDb.deleteAll();
+    }
+    public void onClick_DisplayLists(View v){
+        displayText("Clicked display lists");
+        Cursor cursor = myDb.getAllRows();
+        displayRecordset(cursor);
+    }
+    //Database related. List[]
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        closeDB();
+    }
+
     private void openDB(){
         myDb = new DBAdapter(this);
         myDb.open();
@@ -144,29 +158,11 @@ public class ListActivity extends ActionBarActivity
     private void closeDB() {
         myDb.close();
     }
-*/
-    // called when button is pressed
-    public void onClick_AddList(View v){
-        displayText("Clicked add List");
 
-//        long newId = myDb.insertRow("<List Name>",987,"<Date>");
-        //Query for record added
-      //  Cursor cursor = myDb.getRow(newId);
-      //  displayRecordset(cursor);
-        Intent intent = new Intent(this, CreateListActivity.class);
-        startActivity(intent);
-
+    public void displayText(String message) {
+        TextView textView = (TextView) findViewById(R.id.textDisplay);
+        textView.setText(message);
     }
-    public void onClick_ClearAll(View v){
-        displayText("Clicked clear all");
-//        myDb.deleteAll();
-    }
-    public void onClick_DisplayLists(View v){
-        displayText("Clicked display lists");
-        //Cursor cursor = myDb.getAllRows();
-        //displayRecordset(cursor);
-    }
-/*
     //Display entire record set
     private void displayRecordset(Cursor cursor) {
         String message = "";
@@ -176,17 +172,16 @@ public class ListActivity extends ActionBarActivity
             do {
                 int id = cursor.getInt(DBAdapter.COL_ROWID);
                 String name = cursor.getString(DBAdapter.COL_NAME);
-                int studentNumber = cursor.getInt(DBAdapter.COL_STUDENTNUM);
+               // int studentNumber = cursor.getInt(DBAdapter.COL_STUDENTNUM);
                 String dateAdded = cursor.getString(DBAdapter.COL_DATEADDED);
 
                 //append data to message
-                message += "id=" + id
-                        +" "+ name
+                message +=name +" "+ id + ">"
                         +"  Date added: " + dateAdded
                         + "\n";
             }while(cursor.moveToNext());
         }
         displayText(message);
     }
-*/
+
 }

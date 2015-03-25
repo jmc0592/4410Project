@@ -20,7 +20,7 @@ public class ListsFragment extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     Context ctx = getActivity();
-    DBAdapter myDb;
+    //DBAdapter myDb;
     ListActivity listAc = new ListActivity();
 
     /**
@@ -33,13 +33,14 @@ public class ListsFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
-    }
 
+    }
+    /*
     @Override
     public void onDestroy(){
         super.onDestroy();
         //closeDB();
-    }
+    }*/
 
     public ListsFragment() {
     }
@@ -58,6 +59,7 @@ public class ListsFragment extends Fragment {
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
+}
 /*
  *in main for now
     public void openDB(){
@@ -111,4 +113,4 @@ public class ListsFragment extends Fragment {
         listAc.displayText(message);
     }
 */
-}
+
