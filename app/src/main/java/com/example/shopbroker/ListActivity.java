@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 
@@ -127,7 +129,8 @@ public class ListActivity extends ActionBarActivity
     public void onClick_AddList(View v){
         displayText("Clicked add List");
 
-        long newId = myDb.insertRow("<List",987,"<Date>");
+        long newId = myDb.insertRow("<List>",987,"<Date>");
+        populatelistview();
         //Query for record added
         //Cursor cursor = myDb.getRow(newId);
         //displayRecordset(cursor);
@@ -160,8 +163,8 @@ public class ListActivity extends ActionBarActivity
     }
 
     public void displayText(String message) {
-        TextView textView = (TextView) findViewById(R.id.textDisplay);
-        textView.setText(message);
+        //TextView textView = (TextView) findViewById(R.id.textDisplay);
+        //textView.setText(message);
     }
     //Display entire record set
     private void displayRecordset(Cursor cursor) {
@@ -182,6 +185,18 @@ public class ListActivity extends ActionBarActivity
             }while(cursor.moveToNext());
         }
         displayText(message);
+    }
+    public void populatelistview(){
+        Cursor cursor = myDb.getAllRows();
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ROWID ,DBAdapter.KEY_DATEADDED};
+        int[] viewIDs = new int[]{R.id.listname,R.id.rowID,R.id.listdate};
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(getBaseContext(),R.layout.listview_layout,
+                                cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) findViewById(R.id.listView);
+        mylist.setAdapter(myCursorAdapter);
+
+
     }
 
 }

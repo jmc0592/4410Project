@@ -40,26 +40,37 @@
             android:text="Display" />
     </LinearLayout>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/buttonBar" />
+
     <!--ScrollView to hold each list (the buttons for the lists)-->
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+      <!--  <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/buttonBar"
+            android:orientation="vertical">-->
             <!--Lots of test textViews to see if the scrolling works correctly-->
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="help"
-                android:id="@+id/textDisplay"/>
-            <TextView
+                android:id="@+id/textDisplay"/>-->
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="help2"/>
@@ -226,10 +237,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="will be buttons eventually"/>
+                android:text="will be buttons eventually"/>-->
 
-        </LinearLayout>
-    </ScrollView>
+      <!-- </LinearLayout>
+    </ScrollView>-->
 
 
 </RelativeLayout>

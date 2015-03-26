@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ListsFragment extends Fragment {
@@ -22,7 +24,10 @@ public class ListsFragment extends Fragment {
     Context ctx = getActivity();
     //DBAdapter myDb;
     ListActivity listAc = new ListActivity();
-
+    String[] fieldnames;
+    int[] viewIDs;
+    SimpleCursorAdapter myCursorAdapter;
+    //Cursor cursor = listAc.myDb.getAllRows();
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -33,7 +38,6 @@ public class ListsFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
-
     }
     /*
     @Override
@@ -50,6 +54,13 @@ public class ListsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ROWID ,DBAdapter.KEY_DATEADDED};
+        viewIDs = new int[]{R.id.listname,R.id.rowID,R.id.listdate};
+        //myCursorAdapter = new SimpleCursorAdapter(rootView.getContext(),R.layout.listview_layout,
+        //        cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) rootView.findViewById(R.id.listView);
+        //mylist.setAdapter(myCursorAdapter);
+
         return rootView;
     }
 
@@ -58,6 +69,7 @@ public class ListsFragment extends Fragment {
         super.onAttach(activity);
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
+        //listAc.populatelistview();
     }
 }
 /*
