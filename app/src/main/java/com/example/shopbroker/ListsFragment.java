@@ -20,14 +20,11 @@ public class ListsFragment extends Fragment {
      * The fragment argument representing the section number for this
      * fragment.
      */
+    private DBAdapter dbhelper;
+    private SimpleCursorAdapter myCursorAdapter;
     private static final String ARG_SECTION_NUMBER = "section_number";
     Context ctx = getActivity();
-    //DBAdapter myDb;
     ListActivity listAc = new ListActivity();
-    String[] fieldnames;
-    int[] viewIDs;
-    SimpleCursorAdapter myCursorAdapter;
-    //Cursor cursor = listAc.myDb.getAllRows();
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -39,12 +36,6 @@ public class ListsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    /*
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        //closeDB();
-    }*/
 
     public ListsFragment() {
     }
@@ -54,12 +45,17 @@ public class ListsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-        fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ROWID ,DBAdapter.KEY_DATEADDED};
-        viewIDs = new int[]{R.id.listname,R.id.rowID,R.id.listdate};
-        //myCursorAdapter = new SimpleCursorAdapter(rootView.getContext(),R.layout.listview_layout,
-        //        cursor,fieldnames,viewIDs,0);
+
+        //Populates Listview on creation of the fragment
+        dbhelper = new DBAdapter(getActivity());
+        dbhelper.open();
+        Cursor cursor = dbhelper.getAllRows();
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ROWID ,DBAdapter.KEY_DATEADDED};
+        int[] viewIDs = new int[]{R.id.listname,R.id.rowID,R.id.listdate};
+        myCursorAdapter = new SimpleCursorAdapter(rootView.getContext(),R.layout.listview_layout,
+                cursor,fieldnames,viewIDs,0);
         ListView mylist = (ListView) rootView.findViewById(R.id.listView);
-        //mylist.setAdapter(myCursorAdapter);
+        mylist.setAdapter(myCursorAdapter);
 
         return rootView;
     }
@@ -69,7 +65,6 @@ public class ListsFragment extends Fragment {
         super.onAttach(activity);
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
-        //listAc.populatelistview();
     }
 }
 /*

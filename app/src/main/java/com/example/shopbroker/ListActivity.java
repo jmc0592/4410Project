@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 
 public class ListActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks{
     DBAdapter myDb;
 
     /**
@@ -33,7 +33,7 @@ public class ListActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
+        openDB();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -43,7 +43,7 @@ public class ListActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         
-        openDB();
+
 
     }
 
@@ -129,7 +129,7 @@ public class ListActivity extends ActionBarActivity
     public void onClick_AddList(View v){
         displayText("Clicked add List");
 
-        long newId = myDb.insertRow("<List>",987,"<Date>");
+        long newId = myDb.insertRow("<List>","<Date>");
         populatelistview();
         //Query for record added
         //Cursor cursor = myDb.getRow(newId);
@@ -140,6 +140,7 @@ public class ListActivity extends ActionBarActivity
     public void onClick_ClearAll(View v){
         displayText("Clicked clear all");
         myDb.deleteAll();
+        populatelistview();
     }
     public void onClick_DisplayLists(View v){
         displayText("Clicked display lists");
@@ -197,6 +198,11 @@ public class ListActivity extends ActionBarActivity
         mylist.setAdapter(myCursorAdapter);
 
 
+    }
+
+    public Cursor getCursor(){
+        Cursor cursor =myDb.getAllRows();
+        return cursor;
     }
 
 }

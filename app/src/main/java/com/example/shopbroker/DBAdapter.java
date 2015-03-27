@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.SQLException;
+
 
 // TO USE:
 // Change the package (at top) to match your project.
@@ -29,22 +31,20 @@ public class DBAdapter {
 	 */
 	// TODO: Setup your fields here:
 	public static final String KEY_NAME = "name";
-	public static final String KEY_STUDENTNUM = "studentnum";
 	public static final String KEY_DATEADDED = "dateAdded";
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_NAME = 1;
-	public static final int COL_STUDENTNUM = 2;
-	public static final int COL_DATEADDED = 3;
+	public static final int COL_DATEADDED = 2;
 
 	
-	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_STUDENTNUM, KEY_DATEADDED};
+	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 9;
+	public static final int DATABASE_VERSION = 11;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -61,7 +61,6 @@ public class DBAdapter {
 			//  - "not null" means it is a required field (must be given a value).
 			// NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
 			+ KEY_NAME + " text not null, "
-			+ KEY_STUDENTNUM + " integer not null, "
 			+ KEY_DATEADDED + " string not null"
 			
 			// Rest  of creation:
@@ -83,7 +82,8 @@ public class DBAdapter {
 	}
 	
 	// Open the database connection.
-	public DBAdapter open() {
+	public DBAdapter open(){
+        //myDBHelper = new DatabaseHelper(context);
 		db = myDBHelper.getWritableDatabase();
 		return this;
 	}
@@ -94,7 +94,7 @@ public class DBAdapter {
 	}
 	
 	// Add a new set of values to the database.
-	public long insertRow(String name, int studentNum, String dateAdded) {
+	public long insertRow(String name, String dateAdded) {
 		/*
 		 * CHANGE 3:
 		 */		
@@ -103,7 +103,6 @@ public class DBAdapter {
 		// Create row's data:
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
-		initialValues.put(KEY_STUDENTNUM, studentNum);
 		initialValues.put(KEY_DATEADDED, dateAdded);
 		
 		// Insert it into the database.
@@ -150,7 +149,7 @@ public class DBAdapter {
 	}
 	
 	// Change an existing row to be equal to new data.
-	public boolean updateRow(long rowId, String name, int studentNum, String dateAdded) {
+	public boolean updateRow(long rowId, String name, String dateAdded) {
 		String where = KEY_ROWID + "=" + rowId;
 
 		/*
@@ -161,7 +160,6 @@ public class DBAdapter {
 		// Create row's data:
 		ContentValues newValues = new ContentValues();
 		newValues.put(KEY_NAME, name);
-		newValues.put(KEY_STUDENTNUM, studentNum);
 		newValues.put(KEY_DATEADDED, dateAdded);
 		
 		// Insert it into the database.
