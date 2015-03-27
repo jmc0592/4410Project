@@ -9,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListsFragment extends Fragment {
     /**
@@ -36,7 +38,12 @@ public class ListsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((ListActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
+    }
     public ListsFragment() {
     }
 
@@ -50,22 +57,58 @@ public class ListsFragment extends Fragment {
         dbhelper = new DBAdapter(getActivity());
         dbhelper.open();
         Cursor cursor = dbhelper.getAllRows();
-        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ROWID ,DBAdapter.KEY_DATEADDED};
-        int[] viewIDs = new int[]{R.id.listname,R.id.rowID,R.id.listdate};
-        myCursorAdapter = new SimpleCursorAdapter(rootView.getContext(),R.layout.listview_layout,
-                cursor,fieldnames,viewIDs,0);
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME, DBAdapter.KEY_ROWID, DBAdapter.KEY_DATEADDED};
+        int[] viewIDs = new int[]{R.id.listname, R.id.rowID, R.id.listdate};
+        myCursorAdapter = new SimpleCursorAdapter(rootView.getContext(), R.layout.listview_layout,
+                cursor, fieldnames, viewIDs, 0);
         ListView mylist = (ListView) rootView.findViewById(R.id.listView);
         mylist.setAdapter(myCursorAdapter);
 
+        mylist.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //creates new activity when an item is clicked
+                Intent intent = new Intent(getActivity(), CreateListActivity.class);
+                startActivity(intent);
+                //updateItem(id);
+                //displayToast(id);
+
+            }
+        });
         return rootView;
     }
+    //not used...for now
+    private void updateItem(long id) {
+        Cursor cursor = dbhelper.getRow(id);
+        if(cursor.moveToFirst()){
+            long rowid = cursor.getLong(DBAdapter.COL_ROWID);
+            String name = cursor.getString(DBAdapter.COL_NAME);
+            String date = cursor.getString(DBAdapter.COL_DATEADDED);
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((ListActivity) activity).onSectionAttached(
-                getArguments().getInt(ARG_SECTION_NUMBER));
+            dbhelper.updateRow(rowid,name,date);
+
+        }
+        cursor.close();
+        //displayToast(id);
     }
+    //not used...for now
+    private void displayToast(long id){
+        Cursor cursor = dbhelper.getRow(id);
+        if(cursor.moveToFirst()){
+            long rowid = cursor.getLong(DBAdapter.COL_ROWID);
+            String name = cursor.getString(DBAdapter.COL_NAME);
+            String date = cursor.getString(DBAdapter.COL_DATEADDED);
+
+            String message = "ID:" + rowid +"\n"
+                    + "Listname:" + name +"\n"
+                    + "Date added:" + date;
+            Toast.makeText(getActivity(),message, Toast.LENGTH_LONG).show();
+
+        }
+        cursor.close();
+    }
+
+
 }
 /*
  *in main for now

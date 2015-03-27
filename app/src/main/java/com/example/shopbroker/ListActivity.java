@@ -199,10 +199,4 @@ public class ListActivity extends ActionBarActivity
 
 
     }
-
-    public Cursor getCursor(){
-        Cursor cursor =myDb.getAllRows();
-        return cursor;
-    }
-
 }
