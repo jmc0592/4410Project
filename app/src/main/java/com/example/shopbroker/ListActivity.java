@@ -14,6 +14,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class ListActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks{
@@ -128,8 +131,10 @@ public class ListActivity extends ActionBarActivity
     // called when button is pressed
     public void onClick_AddList(View v){
         displayText("Clicked add List");
-
-        long newId = myDb.insertRow("<List>","<Date>");
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat();
+        String date = df.format(c.getTime());
+        long newId = myDb.insertRow("<List>",date);
         populatelistview();
         //Query for record added
         //Cursor cursor = myDb.getRow(newId);

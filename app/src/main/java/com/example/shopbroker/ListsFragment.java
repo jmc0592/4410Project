@@ -69,9 +69,10 @@ public class ListsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //creates new activity when an item is clicked
                 Intent intent = new Intent(getActivity(), CreateListActivity.class);
+                intent.putExtra("ID",id);
                 startActivity(intent);
                 //updateItem(id);
-                //displayToast(id);
+                displayToast(id);
 
             }
         });

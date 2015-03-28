@@ -33,7 +33,7 @@
         android:id="@+id/totalText"
         android:layout_marginLeft="65dp"
         android:layout_marginStart="65dp"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/sharedText"
         android:layout_toRightOf="@+id/sharedText"
         android:layout_toEndOf="@+id/sharedText" />
 
@@ -43,8 +43,15 @@
         android:id="@+id/totalNumeric"
         android:text="0.00"
         android:gravity="center"
-        android:layout_marginLeft="5dp"
+        android:layout_alignTop="@+id/totalText"
         android:layout_toRightOf="@+id/totalText"
         android:layout_toEndOf="@+id/totalText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

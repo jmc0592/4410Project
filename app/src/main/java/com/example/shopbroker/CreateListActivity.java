@@ -4,14 +4,27 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class CreateListActivity extends ActionBarActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_list);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            long rowID = getIntent().getLongExtra("ID", 0);
+            String rowID_string = Long.toString(rowID);
+
+
+            TextView id = (TextView) findViewById(R.id.editText);
+            id.setText(rowID_string);
+        }
+
     }
 
 
