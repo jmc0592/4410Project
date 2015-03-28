@@ -32,6 +32,7 @@ public class DBAdapter {
 	// TODO: Setup your fields here:
 	public static final String KEY_NAME = "name";
 	public static final String KEY_DATEADDED = "dateAdded";
+
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_NAME = 1;
@@ -44,7 +45,7 @@ public class DBAdapter {
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 11;
+	public static final int DATABASE_VERSION = 12;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
