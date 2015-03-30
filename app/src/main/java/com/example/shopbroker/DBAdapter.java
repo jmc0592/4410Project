@@ -45,7 +45,7 @@ public class DBAdapter {
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 12;
+	public static final int DATABASE_VERSION = 14;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 

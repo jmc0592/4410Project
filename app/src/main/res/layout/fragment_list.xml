@@ -9,14 +9,21 @@
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#f3f3f3"/>
     <LinearLayout
         android:id="@+id/buttonBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editText2">
 
         <Button
             android:id="@+id/btnAdd"
@@ -47,6 +54,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/buttonBar" />
+
+
 
     <!--ScrollView to hold each list (the buttons for the lists)-->
     <!--<ScrollView

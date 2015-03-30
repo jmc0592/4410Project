@@ -1,5 +1,6 @@
 package com.example.shopbroker;
 
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +28,7 @@ public class CreateListActivity extends ActionBarActivity {
     private ArrayList<String> itemsMine = new ArrayList<String>();
     private int itemSpot = 0;
     private boolean toAdd = false;
+    private DBAdapter dbhelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,14 @@ public class CreateListActivity extends ActionBarActivity {
         if (extras != null) {
 
             long rowID = getIntent().getLongExtra("ID", 0);
-            String rowID_string = Long.toString(rowID);
-
-            TextView id = (TextView) findViewById(R.id.editText);
-            id.setText(rowID_string);
+           // String rowID_string = Long.toString(rowID);
+           // TextView id = (TextView) findViewById(R.id.editText);
+           // id.setText(rowID_string);
+            dbhelper = new DBAdapter(this);
+            dbhelper.open();
+            Cursor cursor = dbhelper.getRow(rowID);
+            String ListName = cursor.getString(DBAdapter.COL_NAME);
+            setTitle(ListName);
         }
     }
 

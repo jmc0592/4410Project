@@ -6,10 +6,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import java.util.Calendar;
 public class ListActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks{
     DBAdapter myDb;
-
+    EditText Listname;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -36,7 +38,6 @@ public class ListActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        openDB();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -45,8 +46,8 @@ public class ListActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        
-
+        openDB();
+        //Listname = (EditText) findViewById(R.id.editText2);
 
     }
 
@@ -131,10 +132,16 @@ public class ListActivity extends ActionBarActivity
     // called when button is pressed
     public void onClick_AddList(View v){
         displayText("Clicked add List");
+        Listname = (EditText) findViewById(R.id.editText2);
+        //time me up brother
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat();
         String date = df.format(c.getTime());
-        long newId = myDb.insertRow("<List>",date);
+        //String list = Listname.getText().toString();
+        if(!TextUtils.isEmpty(Listname.getText().toString())){
+          myDb.insertRow(Listname.getText().toString(),date);
+        }
+        //long newId = myDb.insertRow("<List>",date);
         populatelistview();
         //Query for record added
         //Cursor cursor = myDb.getRow(newId);
