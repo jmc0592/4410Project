@@ -7,35 +7,13 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.shopbroker.CreateListActivity">
 
-    <TextView
-        android:text="@string/shared"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/mineText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/sharedText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mine"
-        android:id="@+id/mineText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="70dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total"
         android:id="@+id/totalText"
-        android:layout_marginLeft="65dp"
-        android:layout_marginStart="65dp"
-        android:layout_above="@+id/sharedText"
-        android:layout_toRightOf="@+id/sharedText"
-        android:layout_toEndOf="@+id/sharedText" />
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +29,73 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Mine"
+        android:id="@+id/buttonMine"
+        android:onClick="addToMine"
+        android:layout_below="@+id/editText" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Shared"
+        android:id="@+id/buttonShared"
+        android:onClick="addToShared"
+        android:layout_toRightOf="@+id/buttonMine"
+        android:layout_alignTop="@+id/buttonMine"/>
+    <EditText
+        android:id="@+id/editTextItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/buttonShared"
+        android:layout_alignTop="@+id/buttonShared"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_below="@+id/buttonMine">
+        <LinearLayout
+            android:id="@+id/mineLinearL"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mine"
+                android:id="@+id/mineText" />
+            <ListView
+                android:id="@+id/listViewMine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sharedLinearL"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5">
+            <TextView
+                android:text="@string/shared"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sharedText" />
+            <ListView
+                android:id="@+id/listViewShared"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
