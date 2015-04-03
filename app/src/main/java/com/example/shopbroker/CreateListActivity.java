@@ -86,7 +86,7 @@ public class CreateListActivity extends ActionBarActivity {
     public void addToShared(View v){
         String temp;
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
-        temp = itemET.getText().toString();//get text and convert to string
+        temp = itemET.getText().toString();//get text from EditText and convert to string
         itemET.setText("");//reset editText to blank
         toAdd = true;//test value
         populateListViewShared(toAdd, temp);
