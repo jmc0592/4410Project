@@ -9,7 +9,6 @@
     android:background="#ff0ea2ff"
     android:clickable="true">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,24 +31,14 @@
         android:background="#ff9fff75"
         android:textColor="@android:color/black" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:typeface="serif"
-        android:textColor="#ff090909"
-        android:textColorHighlight="@android:color/white"
-        android:textColorHint="@android:color/white" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Mine"
         android:id="@+id/buttonMine"
         android:onClick="addToMine"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/totalText"
+        android:layout_marginTop="10dp"
         android:background="#ff9fff75"
         android:typeface="serif" />
     <Button
@@ -64,7 +53,7 @@
         android:typeface="serif" />
     <EditText
         android:id="@+id/editTextItem"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/buttonShared"
         android:layout_alignTop="@+id/buttonShared"/>

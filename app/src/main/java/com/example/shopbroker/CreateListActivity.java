@@ -1,23 +1,31 @@
 package com.example.shopbroker;
 
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,10 +89,19 @@ public class CreateListActivity extends ActionBarActivity {
         String temp;
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
         temp = itemET.getText().toString();
-        itemET.setText("");
-        toAdd = true;//test value
-        dbhelper.insertRow_to_Items(temp, String.valueOf(rowID));
-        populateListViewMine(toAdd, temp);
+        if(temp.equals("") || temp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
+            return;
+        else {
+            String testPrice = new ItemRetrieval().doInBackground(temp);//get price using different thread;
+            //test toast stuff for debugging
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(this, testPrice, duration);
+            toast.show();
+            itemET.setText("");//reset input
+            toAdd = true;//test value
+            dbhelper.insertRow_to_Items(temp, String.valueOf(rowID));
+            populateListViewMine(toAdd, temp);
+        }
     }
 
     //onClick for Shared Button
@@ -92,10 +109,13 @@ public class CreateListActivity extends ActionBarActivity {
         String temp;
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
         temp = itemET.getText().toString();//get text from EditText and convert to string
-        itemET.setText("");//reset editText to blank
-        toAdd = true;//test value
-        populateListViewShared(toAdd, temp);
-
+        if(temp.equals("") || temp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)
+            return;
+        else {
+            itemET.setText("");//reset input
+            toAdd = true;//test value
+            populateListViewShared(toAdd, temp);
+        }
         //more methods and things for updating online database in the future
     }
 
@@ -127,5 +147,16 @@ public class CreateListActivity extends ActionBarActivity {
         ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsShared);//convert to list items for ListView
         ListView listView = (ListView) findViewById(R.id.listViewShared);
         listView.setAdapter(itemsAdapter);
+    }
+
+    private class ItemRetrieval extends AsyncTask<String, Void, String> {
+
+        protected String doInBackground(String... items) {
+            String item = items[0];
+            //concatenate together constants with item to create url to
+            String urlToSend = Constants.baseURL + item + Constants.format + Constants.Key;
+            String itemPrice = "0.00";//hardcoded for testing
+            return itemPrice;
+        }
     }
 }
