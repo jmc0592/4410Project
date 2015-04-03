@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
@@ -29,6 +30,7 @@ public class CreateListActivity extends ActionBarActivity {
     private int itemSpot = 0;
     private boolean toAdd = false;
     private DBAdapter dbhelper;
+    private long rowID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class CreateListActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            long rowID = getIntent().getLongExtra("ID", 0);
+            rowID = getIntent().getLongExtra("ID", 0);
            // String rowID_string = Long.toString(rowID);
            // TextView id = (TextView) findViewById(R.id.editText);
            // id.setText(rowID_string);
@@ -47,6 +49,8 @@ public class CreateListActivity extends ActionBarActivity {
             String ListName = cursor.getString(DBAdapter.COL_NAME);
             setTitle(ListName);
         }
+        dbhelper = new DBAdapter(this);
+        dbhelper.open();
     }
 
 
@@ -79,6 +83,7 @@ public class CreateListActivity extends ActionBarActivity {
         temp = itemET.getText().toString();
         itemET.setText("");
         toAdd = true;//test value
+        dbhelper.insertRow_to_Items(temp, String.valueOf(rowID));
         populateListViewMine(toAdd, temp);
     }
 
@@ -98,9 +103,21 @@ public class CreateListActivity extends ActionBarActivity {
     public void populateListViewMine(boolean test, String item){
         if(test)
             itemsMine.add(item);
-        ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsMine);
-        ListView listView = (ListView) findViewById(R.id.listViewMine);
-        listView.setAdapter(itemsAdapter);
+        //dbhelper = new DBAdapter(this);
+        //dbhelper.open();
+        //Cursor cursor = dbhelper.getAllItemRows();
+        Cursor cursor = dbhelper.getItemRow(rowID);
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID};
+        int[] viewIDs = new int[]{R.id.item,R.id.textView};
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
+                cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) findViewById(R.id.listViewMine);
+        mylist.setAdapter(myCursorAdapter);
+
+        //ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsMine);
+       // ListView listView = (ListView) findViewById(R.id.listViewMine);
+       // listView.setAdapter(itemsAdapter);
     }
 
     //create list view for shared

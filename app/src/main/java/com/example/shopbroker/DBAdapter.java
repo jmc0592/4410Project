@@ -10,10 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.SQLException;
+import java.util.List;
 
-
-// TO USE:
-// Change the package (at top) to match your project.
 // Search for "TODO", and make the appropriate changes.
 public class DBAdapter {
 
@@ -32,20 +30,24 @@ public class DBAdapter {
 	// TODO: Setup your fields here:
 	public static final String KEY_NAME = "name";
 	public static final String KEY_DATEADDED = "dateAdded";
+    public static final String KEY_ITEM_LISTID = "itemListId";
 
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_NAME = 1;
 	public static final int COL_DATEADDED = 2;
+    public static final int COL_ITEM_LISTID = 2;
 
 	
 	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
+    public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
+    public static final String DATABASE_ITEMS = "grocery_items";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 14;
+	public static final int DATABASE_VERSION = 22;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -66,7 +68,13 @@ public class DBAdapter {
 			
 			// Rest  of creation:
 			+ ");";
-	
+
+    private static final String CREATE_TABLE_ITEMS =
+            "create table " + DATABASE_ITEMS
+            +" (" + KEY_ROWID + " integer primary key, "
+            + KEY_NAME + " text not null, "
+            + KEY_ITEM_LISTID + " text not null "
+            + ");";
 	// Context of application who uses us.
 	private final Context context;
 	
@@ -109,6 +117,15 @@ public class DBAdapter {
 		// Insert it into the database.
 		return db.insert(DATABASE_TABLE, null, initialValues);
 	}
+
+    public long insertRow_to_Items(String name, String item_listid){
+        ContentValues initialValues = new ContentValues();
+        //initialValues.put(KEY_NAME,name);
+        initialValues.put(KEY_NAME,name);
+        initialValues.put(KEY_ITEM_LISTID, item_listid);
+
+        return db.insert(DATABASE_ITEMS, null, initialValues);
+    }
 	
 	// Delete a row from the database, by rowId (primary key)
 	public boolean deleteRow(long rowId) {
@@ -137,6 +154,15 @@ public class DBAdapter {
 		}
 		return c;
 	}
+    public Cursor getAllItemRows() {
+        String where = null;
+        Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
 
 	// Get a specific row (by rowId)
 	public Cursor getRow(long rowId) {
@@ -148,6 +174,18 @@ public class DBAdapter {
 		}
 		return c;
 	}
+
+    public Cursor getItemRow(long rowId){
+        String where = KEY_ITEM_LISTID + "=" + rowId;
+        Cursor c = db.query(true, DATABASE_ITEMS, ITEMS,
+                           where, null, null, null, null, null );
+        if (c != null) {
+            c.moveToFirst();
+            c.moveToNext();
+        }
+        return c;
+    }
+
 	
 	// Change an existing row to be equal to new data.
 	public boolean updateRow(long rowId, String name, String dateAdded) {
@@ -184,20 +222,22 @@ public class DBAdapter {
 		}
 
 		@Override
-		public void onCreate(SQLiteDatabase _db) {
-			_db.execSQL(DATABASE_CREATE_SQL);			
+		public void onCreate(SQLiteDatabase db) {
+			db.execSQL(DATABASE_CREATE_SQL);
+            db.execSQL(CREATE_TABLE_ITEMS);
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase _db, int oldVersion, int newVersion) {
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading application's database from version " + oldVersion
 					+ " to " + newVersion + ", which will destroy all old data!");
 			
 			// Destroy old database:
-			_db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_ITEMS);
 			
 			// Recreate new database:
-			onCreate(_db);
+			onCreate(db);
 		}
 	}
 }
