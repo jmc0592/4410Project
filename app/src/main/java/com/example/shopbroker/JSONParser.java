@@ -16,9 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by Jacob on 4/3/2015.
- */
 public class JSONParser {
     static InputStream is = null;
     static JSONObject jObj = null;
