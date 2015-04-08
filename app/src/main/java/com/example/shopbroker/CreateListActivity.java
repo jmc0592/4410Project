@@ -92,11 +92,12 @@ public class CreateListActivity extends ActionBarActivity {
         if(temp.equals("") || temp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
             return;
         else {
-            String testPrice = new ItemRetrieval().doInBackground(temp);//get price using different thread;
+            ItemRetrieval retrievalTask = new ItemRetrieval();//get price using different thread;
+            retrievalTask.execute(temp);
             //test toast stuff for debugging
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(this, testPrice, duration);
-            toast.show();
+            //int duration = Toast.LENGTH_SHORT;
+            //Toast toast = Toast.makeText(this, itemPrice, duration);
+            //toast.show();
             itemET.setText("");//reset input
             toAdd = true;//test value
             dbhelper.insertRow_to_Items(temp, String.valueOf(rowID));
@@ -149,14 +150,30 @@ public class CreateListActivity extends ActionBarActivity {
         listView.setAdapter(itemsAdapter);
     }
 
+    /**
+     * Background task to get price
+     */
     private class ItemRetrieval extends AsyncTask<String, Void, String> {
 
+        public static final String Key = "nsfceev8vy89jk5pcg4x4j52";
+        public static final String baseURL = "api.walmartlabs.com/v1/search?query=";
+        public static final String format = "&format=json&apiKey=";
+
+        @Override
         protected String doInBackground(String... items) {
             String item = items[0];
             //concatenate together constants with item to create url to
-            String urlToSend = Constants.baseURL + item + Constants.format + Constants.Key;
-            String itemPrice = "0.00";//hardcoded for testing
+            String urlToSend = baseURL + item + format + Key;
+            JSONParser jObj = new JSONParser();
+            String itemPrice = jObj.getJSONFromUrl(urlToSend);
+            //String itemPrice = "0.00";//hardcoded for testing
             return itemPrice;
+        }
+
+        protected void onPostExecute(String price){
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), price, duration);
+            toast.show();
         }
     }
 }
