@@ -156,7 +156,7 @@ public class CreateListActivity extends ActionBarActivity {
     private class ItemRetrieval extends AsyncTask<String, Void, String> {
 
         public static final String Key = "nsfceev8vy89jk5pcg4x4j52";
-        public static final String baseURL = "api.walmartlabs.com/v1/search?query=";
+        public static final String baseURL = "http://api.walmartlabs.com/v1/search?query=";
         public static final String format = "&format=json&apiKey=";
 
         @Override
@@ -165,8 +165,7 @@ public class CreateListActivity extends ActionBarActivity {
             //concatenate together constants with item to create url to
             String urlToSend = baseURL + item + format + Key;
             JSONParser jObj = new JSONParser();
-            String itemPrice = jObj.getJSONFromUrl(urlToSend);
-            //String itemPrice = "0.00";//hardcoded for testing
+            String itemPrice = jObj.getJSONFromUrl(urlToSend);//get price from parsing JSON
             return itemPrice;
         }
 

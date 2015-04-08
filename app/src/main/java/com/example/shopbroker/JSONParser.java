@@ -32,24 +32,21 @@ public class JSONParser {
         // Making HTTP request
         try {
             //connection to web
-            //DO: fix website connection
-            URL realURL = new URL(url);
-            URLConnection urlConnection = realURL.openConnection();
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet getRequest= new HttpGet(url);
             HttpResponse httpResponse = httpClient.execute(getRequest);
 
 
-                HttpEntity httpEntity = httpResponse.getEntity();
-                String data = EntityUtils.toString(httpEntity);//get JSON data
-                JSONObject jObj = new JSONObject(data);//create JSON object with data as input
-                JSONArray jArray = jObj.getJSONArray("items");//get array of JSON objects called 'items'
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String data = EntityUtils.toString(httpEntity);//get JSON data
+            JSONObject jObj = new JSONObject(data);//create JSON object with data as input
+            JSONArray jArray = jObj.getJSONArray("items");//get array of JSON objects called 'items'
 
-                //gets JSON data of first item (index 0)
-                JSONObject jRealObject = jArray.getJSONObject(0);
-                String itemID = jRealObject.getString("itemID");
-                String cost = jRealObject.getString("salePrice");
-                return cost;
+            //gets JSON data of first item (index 0)
+            JSONObject jRealObject = jArray.getJSONObject(0);
+            String itemID = jRealObject.getString("itemId");
+            String cost = jRealObject.getString("salePrice");
+            return cost;
         }
         //required catches
         catch (UnsupportedEncodingException e)
