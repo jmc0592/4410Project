@@ -5,7 +5,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.shopbroker.LoginActivity">
+    tools:context="com.example.shopbroker.LoginActivity"
+    android:background="@android:drawable/editbox_dropdown_dark_frame">
 
     <!-- Login progress -->
     <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
@@ -37,7 +38,8 @@
             </LinearLayout>
 
             <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:orientation="vertical">
+                android:layout_height="wrap_content" android:orientation="vertical"
+                android:weightSum="1">
 
                 <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:hint="@string/prompt_email"
@@ -54,7 +56,34 @@
                 <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:layout_marginTop="16dp" android:text="@string/action_sign_in"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:background="@color/wallet_holo_blue_light" />
+
+                <Space
+                    android:layout_width="415dp"
+                    android:layout_height="58dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="92dp"
+                    android:id="@+id/imageView2"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/walmartnext" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView3"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/walmart" />
+
+                <ImageView
+                    android:layout_width="405dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView4"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/friends" />
 
             </LinearLayout>
         </LinearLayout>

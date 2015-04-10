@@ -161,6 +161,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
+
         }
 
         if (cancel) {
@@ -173,11 +174,14 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
+        //return email.length() > 4;
+        //password
         return email.contains("@");
     }
 
@@ -239,6 +243,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 revokeAccess();
             }
         });
+
     }
 
     @Override
@@ -392,6 +397,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
         }
     }
+
 }
 
 
