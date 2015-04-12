@@ -16,6 +16,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
+//parse to JSON to sql DB
 public class ListsFragment extends Fragment {
     /**
     /**
@@ -73,8 +77,11 @@ public class ListsFragment extends Fragment {
                 startActivity(intent);
                 //updateItem(id);
                 displayToast(id);
+               //toParse(id); //Adds the Row in the "list" table to Parse
 
             }
+
+
         });
         return rootView;
     }
@@ -91,6 +98,29 @@ public class ListsFragment extends Fragment {
         }
         cursor.close();
         //displayToast(id);
+    }
+   // ParseObject testObject = new ParseObject("TestObject");
+    //testObject.put("foo", "bar");
+   // testObject.saveInBackground();
+    private void toParse(long id) {
+        ParseObject testObject = new ParseObject("TestObject");
+        //testObject.WhereEqualTo("rowID", urowID);
+        Cursor cursor = dbhelper.getRow(id);
+        if(cursor.moveToFirst()){
+            long rowid = cursor.getLong(DBAdapter.COL_ROWID);
+            String name = cursor.getString(DBAdapter.COL_NAME);
+            String date = cursor.getString(DBAdapter.COL_DATEADDED);
+            //ParseObject testObject = new ParseObject("TestObject");
+            testObject.put("rowID", rowid);
+            testObject.put("ListName", name);
+            testObject.put("Date", date);
+            testObject.saveInBackground();
+        }
+        cursor.close();
+        //ParseObject testObject = new ParseObject("TestObject");
+        //testObject.put("rowID", rowid);
+        // testObject.saveInBackground();
+
     }
     //not used...for now
     private void displayToast(long id){

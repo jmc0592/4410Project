@@ -16,6 +16,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -48,7 +51,12 @@ public class ListActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         openDB();
         //Listname = (EditText) findViewById(R.id.editText2);
+        Parse.enableLocalDatastore(this);
 
+        Parse.initialize(this, "bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf", "jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC");
+       // ParseObject testObject = new ParseObject("TestObject");
+       // testObject.put("foo", "bar");
+       // testObject.saveInBackground();
     }
 
     @Override

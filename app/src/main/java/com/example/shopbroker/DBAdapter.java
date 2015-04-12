@@ -205,7 +205,11 @@ public class DBAdapter {
 		return db.update(DATABASE_TABLE, newValues, where, null) != 0;
 	}
 	
-	
+//	public boolean updateItemPrice(long rowId, String price){
+       // String where = KEY_ROWID + "=" + rowId;
+       // ContentValues newValues = new ContentValues();
+      //  newValues.put(KEY_PRICE, )
+ //   }
 	
 	/////////////////////////////////////////////////////////////////////
 	//	Private Helper Classes:

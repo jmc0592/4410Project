@@ -57,6 +57,7 @@ public class CreateListActivity extends ActionBarActivity {
             String ListName = cursor.getString(DBAdapter.COL_NAME);
             setTitle(ListName);
         }
+
         dbhelper = new DBAdapter(this);
         dbhelper.open();
     }
