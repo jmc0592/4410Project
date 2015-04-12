@@ -18,27 +18,16 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CreateListActivity extends ActionBarActivity {
 
-    //Activity scope variables to handle onClicks
+    //Activity scope variables
     private ArrayList<String> itemsShared = new ArrayList<String>();
     private ArrayList<String> itemsMine = new ArrayList<String>();
     private String cPrice = "";
     private String cTemp;
     private int itemSpot = 0;
-    private boolean toAdd = false;
     private DBAdapter dbhelper;
     private long rowID;
 
@@ -97,10 +86,6 @@ public class CreateListActivity extends ActionBarActivity {
         else {
             ItemRetrieval retrievalTask = new ItemRetrieval();//get price using different thread;
             retrievalTask.execute(cTemp);
-            //test toast stuff for debugging
-            //int duration = Toast.LENGTH_SHORT;
-            //Toast toast = Toast.makeText(this, itemPrice, duration);
-            //toast.show();
             itemET.setText("");//reset input
             dbhelper.insertRow_to_Items(cTemp, String.valueOf(rowID), cPrice);
             populateListViewMine(cTemp);
@@ -116,7 +101,6 @@ public class CreateListActivity extends ActionBarActivity {
             return;
         else {
             itemET.setText("");//reset input
-            toAdd = true;//test value
             populateListViewShared(temp);
         }
         //more methods and things for updating online database in the future
@@ -136,10 +120,6 @@ public class CreateListActivity extends ActionBarActivity {
                 cursor,fieldnames,viewIDs,0);
         ListView mylist = (ListView) findViewById(R.id.listViewMine);
         mylist.setAdapter(myCursorAdapter);
-
-        //ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsMine);
-       // ListView listView = (ListView) findViewById(R.id.listViewMine);
-       // listView.setAdapter(itemsAdapter);
     }
 
     //create list view for shared
@@ -174,10 +154,11 @@ public class CreateListActivity extends ActionBarActivity {
             cPrice = price;
             Cursor cursor = dbhelper.getAllItemRows();
             cursor.moveToLast();
-            long id = cursor.getLong(DBAdapter.COL_ROWID);
+            long id = cursor.getLong(DBAdapter.COL_ROWID);//get id entered item
             dbhelper.updateItemPrice(id, cPrice);
-            populateListViewMine(cTemp);
+            populateListViewMine(cTemp);//repopulate listview
 
+            //toasts for debugging purposes
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(getApplicationContext(), cPrice, duration);
             toast.show();
