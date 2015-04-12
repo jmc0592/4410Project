@@ -31,6 +31,7 @@ public class DBAdapter {
 	public static final String KEY_NAME = "name";
 	public static final String KEY_DATEADDED = "dateAdded";
     public static final String KEY_ITEM_LISTID = "itemListId";
+    public static final String KEY_PRICE = "price";
 
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
@@ -40,14 +41,14 @@ public class DBAdapter {
 
 	
 	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
-    public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID};
+    public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_PRICE};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
     public static final String DATABASE_ITEMS = "grocery_items";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 22;
+	public static final int DATABASE_VERSION = 23;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -73,7 +74,8 @@ public class DBAdapter {
             "create table " + DATABASE_ITEMS
             +" (" + KEY_ROWID + " integer primary key, "
             + KEY_NAME + " text not null, "
-            + KEY_ITEM_LISTID + " text not null "
+            + KEY_ITEM_LISTID + " text not null, "
+            + KEY_PRICE + " text not null "
             + ");";
 	// Context of application who uses us.
 	private final Context context;
@@ -118,11 +120,12 @@ public class DBAdapter {
 		return db.insert(DATABASE_TABLE, null, initialValues);
 	}
 
-    public long insertRow_to_Items(String name, String item_listid){
+    public long insertRow_to_Items(String name, String item_listid, String price){
         ContentValues initialValues = new ContentValues();
         //initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_ITEM_LISTID, item_listid);
+        initialValues.put(KEY_PRICE, price);
 
         return db.insert(DATABASE_ITEMS, null, initialValues);
     }
@@ -204,6 +207,16 @@ public class DBAdapter {
 		// Insert it into the database.
 		return db.update(DATABASE_TABLE, newValues, where, null) != 0;
 	}
+
+    //update price in database
+    public boolean updateItemPrice(long rowId, String price){
+        String where = KEY_ROWID + "=" + rowId;
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_PRICE, price);
+
+        //insert into database
+        return db.update(DATABASE_ITEMS, newValues, where, null) != 0;
+    }
 	
 //	public boolean updateItemPrice(long rowId, String price){
        // String where = KEY_ROWID + "=" + rowId;
