@@ -35,6 +35,8 @@ public class CreateListActivity extends ActionBarActivity {
     //Activity scope variables to handle onClicks
     private ArrayList<String> itemsShared = new ArrayList<String>();
     private ArrayList<String> itemsMine = new ArrayList<String>();
+    private String cPrice = "";
+    private String cTemp;
     private int itemSpot = 0;
     private boolean toAdd = false;
     private DBAdapter dbhelper;
@@ -88,20 +90,19 @@ public class CreateListActivity extends ActionBarActivity {
     public void addToMine(View v){
         String temp;
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
-        temp = itemET.getText().toString();
-        if(temp.equals("") || temp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
+        cTemp = itemET.getText().toString();
+        if(cTemp.equals("") || cTemp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
             return;
         else {
             ItemRetrieval retrievalTask = new ItemRetrieval();//get price using different thread;
-            retrievalTask.execute(temp);
+            retrievalTask.execute(cTemp);
             //test toast stuff for debugging
             //int duration = Toast.LENGTH_SHORT;
             //Toast toast = Toast.makeText(this, itemPrice, duration);
             //toast.show();
             itemET.setText("");//reset input
-            toAdd = true;//test value
-            dbhelper.insertRow_to_Items(temp, String.valueOf(rowID));
-            populateListViewMine(toAdd, temp);
+            dbhelper.insertRow_to_Items(cTemp, String.valueOf(rowID), cPrice);
+            populateListViewMine(cTemp);
         }
     }
 
@@ -115,21 +116,20 @@ public class CreateListActivity extends ActionBarActivity {
         else {
             itemET.setText("");//reset input
             toAdd = true;//test value
-            populateListViewShared(toAdd, temp);
+            populateListViewShared(temp);
         }
         //more methods and things for updating online database in the future
     }
 
     //create list view for Mine
-    public void populateListViewMine(boolean test, String item){
-        if(test)
+    public void populateListViewMine(String item){
             itemsMine.add(item);
         //dbhelper = new DBAdapter(this);
         //dbhelper.open();
         //Cursor cursor = dbhelper.getAllItemRows();
         Cursor cursor = dbhelper.getItemRow(rowID);
-        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID};
-        int[] viewIDs = new int[]{R.id.item,R.id.textView};
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE};
+        int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
                 cursor,fieldnames,viewIDs,0);
@@ -142,8 +142,8 @@ public class CreateListActivity extends ActionBarActivity {
     }
 
     //create list view for shared
-    public void populateListViewShared(boolean test, String item){
-        if(test)
+    public void populateListViewShared(String item){
+
             itemsShared.add(item);
         ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsShared);//convert to list items for ListView
         ListView listView = (ListView) findViewById(R.id.listViewShared);
@@ -170,9 +170,18 @@ public class CreateListActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(String price){
+            cPrice = price;
+            Cursor cursor = dbhelper.getAllItemRows();
+            cursor.moveToLast();
+            long id = cursor.getLong(DBAdapter.COL_ROWID);
+            dbhelper.updateItemPrice(id, cPrice);
+            populateListViewMine(cTemp);
+
             int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(getApplicationContext(), price, duration);
+            Toast toast = Toast.makeText(getApplicationContext(), cPrice, duration);
             toast.show();
+
+            cPrice = "";//reset to blank
         }
     }
 }
