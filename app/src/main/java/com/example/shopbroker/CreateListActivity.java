@@ -27,9 +27,9 @@ public class CreateListActivity extends ActionBarActivity {
     private ArrayList<String> itemsMine = new ArrayList<String>();
     private String cPrice = "";
     private String cTemp;
-    private int itemSpot = 0;
     private DBAdapter dbhelper;
     private long rowID;
+    private float totalPrice = 0.00f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,6 @@ public class CreateListActivity extends ActionBarActivity {
 
     //onClick for Mine button
     public void addToMine(View v){
-        String temp;
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
         cTemp = itemET.getText().toString();
         if(cTemp.equals("") || cTemp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
@@ -131,6 +130,17 @@ public class CreateListActivity extends ActionBarActivity {
         listView.setAdapter(itemsAdapter);
     }
 
+    public void addToTotal(String addPrice){
+        String totalPriceChar;
+
+        totalPrice += Float.parseFloat(addPrice);//update global total by converting String to float
+        totalPriceChar = Float.toString(totalPrice);//after update convert back to String
+
+        //update textView
+        TextView totalText = (TextView) findViewById(R.id.totalNumeric);
+        totalText.setText(totalPriceChar);
+    }
+
     /**
      * Background task to get price
      */
@@ -155,7 +165,8 @@ public class CreateListActivity extends ActionBarActivity {
             Cursor cursor = dbhelper.getAllItemRows();
             cursor.moveToLast();
             long id = cursor.getLong(DBAdapter.COL_ROWID);//get id entered item
-            dbhelper.updateItemPrice(id, cPrice);
+            dbhelper.updateItemPrice(id, cPrice);//update price in database
+            addToTotal(cPrice);
             populateListViewMine(cTemp);//repopulate listview
 
             //toasts for debugging purposes
@@ -163,7 +174,7 @@ public class CreateListActivity extends ActionBarActivity {
             Toast toast = Toast.makeText(getApplicationContext(), cPrice, duration);
             toast.show();
 
-            cPrice = "";//reset to blank
+            cPrice = "";//reset to blank input
         }
     }
 }
