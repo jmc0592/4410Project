@@ -59,6 +59,6 @@ public class JSONParser {
         {
             e.printStackTrace();
         }
-        return "nope";//if getting data doesn't work
+        return "Could not find item's price.";//if getting data doesn't work
     }
 }

@@ -161,6 +161,8 @@ public class CreateListActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(String price){
+            if(price.equals("Could not find item's price."))
+                return;
             cPrice = price;
             Cursor cursor = dbhelper.getAllItemRows();
             cursor.moveToLast();
