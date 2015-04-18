@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 //parse to JSON to sql DB
 public class ListsFragment extends Fragment {
@@ -73,9 +74,10 @@ public class ListsFragment extends Fragment {
                 //creates new activity when an item is clicked
                 Intent intent = new Intent(getActivity(), CreateListActivity.class);
                 intent.putExtra("ID",id);
-                startActivity(intent);
+                //startActivity(intent);
                 //updateItem(id);
-                displayToast(id);
+                ShowCurrentUser();
+               // displayToast(id);
                //toParse(id); //Adds the Row in the "list" table to Parse
 
             }
@@ -136,6 +138,16 @@ public class ListsFragment extends Fragment {
 
         }
         cursor.close();
+    }
+    public void ShowCurrentUser(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser!=null){
+            String username = currentUser.getString("username");
+            String objectId = currentUser.getObjectId();//currentUser.getString("objectId");
+            String message = "Username: " + username +"\n"
+                    + "objectId: " + objectId;
+            Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
+        }
     }
 
 

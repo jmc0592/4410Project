@@ -15,10 +15,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -54,6 +58,7 @@ public class ListActivity extends ActionBarActivity
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this, "bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf", "jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC");
+        login();
        // ParseObject testObject = new ParseObject("TestObject");
        // testObject.put("foo", "bar");
        // testObject.saveInBackground();
@@ -218,5 +223,15 @@ public class ListActivity extends ActionBarActivity
         mylist.setAdapter(myCursorAdapter);
 
 
+    }
+    public void login(){
+        ParseUser.logInInBackground("Developer1","1234", new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, com.parse.ParseException e) {
+                if (parseUser != null){
+                    Toast.makeText(getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }
