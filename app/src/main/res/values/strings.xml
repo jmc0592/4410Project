@@ -16,4 +16,6 @@
     <string name="shared">Shared</string>
     <string name="mine">Mine</string>
     <string name="total">Total:</string>
+    <string name="parse_app_id">bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf</string>
+    <string name="parse_client_key">jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC</string>
 </resources>

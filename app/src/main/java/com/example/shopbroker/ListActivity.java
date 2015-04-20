@@ -55,9 +55,12 @@ public class ListActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         openDB();
         //Listname = (EditText) findViewById(R.id.editText2);
-        Parse.enableLocalDatastore(this);
+        /*
+         * Moved to App.java file. fixed app crash issue when pressing back button.
 
-        Parse.initialize(this, "bwCLaJy8j2iOS4QyWYCm7dY51vIyPj0RPaM7F8cf", "jwXmPjQzAOMxVjTaVudCLGl92mKgqU5ZgX0h6uiC");
+       //Parse.enableLocalDatastore(this);
+       //Parse.initialize(this);
+        */
         login();
        // ParseObject testObject = new ParseObject("TestObject");
        // testObject.put("foo", "bar");
