@@ -74,8 +74,8 @@ public class ListsFragment extends Fragment {
                 //creates new activity when an item is clicked
                 Intent intent = new Intent(getActivity(), CreateListActivity.class);
                 intent.putExtra("ID",id);
-                //startActivity(intent);
-                //updateItem(id);
+                startActivity(intent);//added this back to it goes to activity
+                updateItem(id);
                 ShowCurrentUser();
                // displayToast(id);
                //toParse(id); //Adds the Row in the "list" table to Parse

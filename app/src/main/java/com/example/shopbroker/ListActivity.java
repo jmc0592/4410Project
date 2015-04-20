@@ -228,8 +228,14 @@ public class ListActivity extends ActionBarActivity
         ParseUser.logInInBackground("Developer1","1234", new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, com.parse.ParseException e) {
-                if (parseUser != null){
+                if (parseUser != null && e == null){// if user exists and no exception found
                     Toast.makeText(getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
+                }
+                else if (parseUser == null){//if there is no user
+                    return;
+                }
+                else{//if the exception gets thrown
+                    e.printStackTrace();
                 }
             }
         });
