@@ -61,10 +61,6 @@ public class ListActivity extends ActionBarActivity
        //Parse.enableLocalDatastore(this);
        //Parse.initialize(this);
         */
-        login();
-       // ParseObject testObject = new ParseObject("TestObject");
-       // testObject.put("foo", "bar");
-       // testObject.saveInBackground();
     }
 
     @Override
@@ -226,21 +222,5 @@ public class ListActivity extends ActionBarActivity
         mylist.setAdapter(myCursorAdapter);
 
 
-    }
-    public void login(){
-        ParseUser.logInInBackground("Developer1","1234", new LogInCallback() {
-            @Override
-            public void done(ParseUser parseUser, com.parse.ParseException e) {
-                if (parseUser != null && e == null){// if user exists and no exception found
-                    Toast.makeText(getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
-                }
-                else if (parseUser == null){//if there is no user
-                    return;
-                }
-                else{//if the exception gets thrown
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

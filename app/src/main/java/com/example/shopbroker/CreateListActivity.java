@@ -31,7 +31,7 @@ public class CreateListActivity extends ActionBarActivity {
     private long rowID;
     private float totalPrice = 0.00f;
 
-    @Override
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_list);
