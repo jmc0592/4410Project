@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class CreateListActivity extends ActionBarActivity {
@@ -135,7 +136,8 @@ public class CreateListActivity extends ActionBarActivity {
         String totalPriceChar;
 
         totalPrice += Float.parseFloat(addPrice);//update global total by converting String to float
-        totalPriceChar = Float.toString(totalPrice);//after update convert back to String
+        BigDecimal totalFormatted = new BigDecimal(totalPrice).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        totalPriceChar = Float.toString(totalFormatted.floatValue());//after update convert back to String
 
         //update textView
         TextView totalText = (TextView) findViewById(R.id.totalNumeric);
@@ -162,14 +164,14 @@ public class CreateListActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(String price){
-            if(price.equals("Could not find item's price."))
-                return;
+
             cPrice = price;
             Cursor cursor = dbhelper.getAllItemRows();
             cursor.moveToLast();
-            long id = cursor.getLong(DBAdapter.COL_ROWID);//get id entered item
+            long id = cursor.getLong(DBAdapter.COL_ROWID);//get id of entered item
             dbhelper.updateItemPrice(id, cPrice);//update price in database
-            addToTotal(cPrice);
+            if(!price.equals("Price not found."))
+                addToTotal(cPrice);
             populateListViewMine(cTemp);//repopulate listview
 
             //toasts for debugging purposes
