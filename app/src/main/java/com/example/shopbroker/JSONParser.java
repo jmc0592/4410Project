@@ -34,13 +34,21 @@ public class JSONParser {
             HttpEntity httpEntity = httpResponse.getEntity();
             String data = EntityUtils.toString(httpEntity);//get JSON data
             JSONObject jObj = new JSONObject(data);//create JSON object with data as input
-            JSONArray jArray = jObj.getJSONArray("items");//get array of JSON objects called 'items'
+            JSONArray jArray = jObj.getJSONArray("items");//get array of JSON objects called 'items
+            float minCost = 1000.00f;
 
-            //gets JSON data of first item (index 0)
-            JSONObject jRealObject = jArray.getJSONObject(0);
-            String itemID = jRealObject.getString("itemId");
-            String cost = jRealObject.getString("salePrice");
-            return cost;
+            //loop through json array of items
+            for(int i=0; i < jArray.length(); i++) {
+                JSONObject jRealObject = jArray.getJSONObject(i);
+                String itemID = jRealObject.getString("itemId");
+                String cost = jRealObject.getString("salePrice");//get cost as String
+                float fCost = Float.valueOf(cost);//convert to float to compare
+
+                //maintain minimum cost
+                if(fCost < minCost)
+                    minCost = fCost;
+            }
+            return Float.toString(minCost);
         }
         //required catches
         catch (UnsupportedEncodingException e)

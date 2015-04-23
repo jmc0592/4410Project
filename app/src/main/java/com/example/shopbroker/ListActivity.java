@@ -75,7 +75,10 @@ public class ListActivity extends ActionBarActivity
         //switch fragments based on their position
         switch(position) {
             default:
-
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, ListsFragment.newInstance(position + 1))
+                        .commit();
+                break;
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, ListsFragment.newInstance(position + 1))
@@ -234,8 +237,8 @@ public class ListActivity extends ActionBarActivity
                 if (parseUser != null && e == null){// if user exists and no exception found
                     Toast.makeText(getApplicationContext(),"Logged in",Toast.LENGTH_LONG).show();
                 }
-                else if (parseUser == null){//if there is no user
-                    return;
+                else if (parseUser == null){//if there is no user. say username or password is invalid to not give hints for security reasons
+                    Toast.makeText(getApplicationContext(), "Username/password invalid.", Toast.LENGTH_LONG).show();
                 }
                 else{//if the exception gets thrown
                     e.printStackTrace();
