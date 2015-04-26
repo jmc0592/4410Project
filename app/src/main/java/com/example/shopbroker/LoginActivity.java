@@ -26,10 +26,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.parse.LogInCallback;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,12 +185,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         //TODO: Replace this with your own logic
         //return email.length() > 4;
         //password
-        return email.contains("@");
+        return true;/*email.contains("@");*/
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
     /**
@@ -354,6 +357,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            login(mEmail, mPassword);
 
             try {
                 // Simulate network access.
@@ -380,9 +384,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
-                startActivity(intent);
-                finish();
+               // finish();
 
 
             } else {
@@ -396,6 +398,23 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    public void login(String mEmail, String mPassword){
+        ParseUser.logInInBackground(mEmail, mPassword, new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, com.parse.ParseException e) {
+                if (parseUser != null && e == null) {// if user exists and no exception found
+                    Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                    startActivity(intent);
+                } else if (parseUser == null) {//if there is no user. say username or password is invalid to not give hints for security reasons
+                    Toast.makeText(getApplicationContext(), "Username/password invalid.", Toast.LENGTH_LONG).show();
+                } else {//if the exception gets thrown
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }
