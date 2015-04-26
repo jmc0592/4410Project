@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.parse.ParseObject;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -32,6 +34,8 @@ public class CreateListActivity extends ActionBarActivity {
     private DBAdapter dbhelper;
     private long rowID;
     private float totalPrice = 0.00f;
+    private String shared;
+    private boolean priceFound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class CreateListActivity extends ActionBarActivity {
 
     //onClick for Mine button
     public void addToMine(View v){
+        shared = "0";
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
         cTemp = itemET.getText().toString();
         if(cTemp.equals("") || cTemp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
@@ -88,21 +93,24 @@ public class CreateListActivity extends ActionBarActivity {
             ItemRetrieval retrievalTask = new ItemRetrieval();//get price using different thread;
             retrievalTask.execute(cTemp);
             itemET.setText("");//reset input
-            dbhelper.insertRow_to_Items(cTemp, String.valueOf(rowID), cPrice);
+            dbhelper.insertRow_to_Items(cTemp, String.valueOf(rowID), cPrice, shared);
             populateListViewMine(cTemp);
         }
     }
 
     //onClick for Shared Button
     public void addToShared(View v){
-        String temp;
+        shared = "1";
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
-        temp = itemET.getText().toString();//get text from EditText and convert to string
-        if(temp.equals("") || temp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)
+        cTemp = itemET.getText().toString();
+        if(cTemp.equals("") || cTemp.equals(" "))//checks if input is blank or a space(account for 1 accidental spacebar hit)s
             return;
         else {
+            ItemRetrieval retrievalTask = new ItemRetrieval();//get price using different thread;
+            retrievalTask.execute(cTemp);
             itemET.setText("");//reset input
-            populateListViewShared(temp);
+            dbhelper.insertRow_to_Items(cTemp, String.valueOf(rowID), cPrice, shared);
+            populateListViewShared(cTemp);
         }
         //more methods and things for updating online database in the future
     }
@@ -113,8 +121,8 @@ public class CreateListActivity extends ActionBarActivity {
         //dbhelper = new DBAdapter(this);
         //dbhelper.open();
         //Cursor cursor = dbhelper.getAllItemRows();
-        Cursor cursor = dbhelper.getItemRow(rowID);
-        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE};
+        Cursor cursor = dbhelper.getItemRowMine(rowID);//get item if it's tagged as mine
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
         int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
@@ -127,9 +135,26 @@ public class CreateListActivity extends ActionBarActivity {
     public void populateListViewShared(String item){
 
             itemsShared.add(item);
-        ListAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemsShared);//convert to list items for ListView
-        ListView listView = (ListView) findViewById(R.id.listViewShared);
-        listView.setAdapter(itemsAdapter);
+        Cursor cursor = dbhelper.getItemRowShared(rowID);//get item if it's tagged as shared
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
+        int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
+                cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) findViewById(R.id.listViewShared);
+        mylist.setAdapter(myCursorAdapter);
+
+        //online handling
+        if(priceFound)
+        {
+            ParseObject parseObj = new ParseObject("Items");
+            Cursor cursor1 = dbhelper.getRow(rowID);//get row from current rowID
+            String listName = cursor1.getString(DBAdapter.COL_NAME);
+            parseObj.put("listName", listName);
+            parseObj.put("itemName", item);
+            parseObj.put("price", cPrice);
+            parseObj.saveInBackground();
+        }
     }
 
     public void addToTotal(String addPrice){
@@ -170,9 +195,15 @@ public class CreateListActivity extends ActionBarActivity {
             cursor.moveToLast();
             long id = cursor.getLong(DBAdapter.COL_ROWID);//get id of entered item
             dbhelper.updateItemPrice(id, cPrice);//update price in database
-            if(!price.equals("Price not found."))
+            if(!price.equals("Price not found.")) {
+                priceFound = true;
                 addToTotal(cPrice);
-            populateListViewMine(cTemp);//repopulate listview
+            }
+            //choose which listview to refresh
+            if(shared.equals("0"))
+                populateListViewMine(cTemp);//repopulate listview
+            else
+                populateListViewShared(cTemp);
 
             //toasts for debugging purposes
             int duration = Toast.LENGTH_SHORT;
@@ -180,6 +211,7 @@ public class CreateListActivity extends ActionBarActivity {
             toast.show();
 
             cPrice = "";//reset to blank input
+            priceFound = false;
         }
     }
 }

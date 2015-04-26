@@ -34,6 +34,7 @@ public class DBAdapter {
     public static final String KEY_PRICE = "price";
     public static final String KEY_OBJID = "objectID";
 
+    public static final String KEY_SHARED = "shared";
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_NAME = 1;
@@ -43,8 +44,8 @@ public class DBAdapter {
 
 	
 	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
-    public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_PRICE};
     public static final String[] FRIENDS = new String[] {KEY_ROWID, KEY_NAME, KEY_OBJID};
+    public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_PRICE, KEY_SHARED};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
@@ -52,7 +53,7 @@ public class DBAdapter {
     public static final String DATABASE_ITEMS = "grocery_items";
     public static final String FRIENDS_TABLE = "friend_Table";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 24;
+	public static final int DATABASE_VERSION = 25;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -79,7 +80,8 @@ public class DBAdapter {
             +" (" + KEY_ROWID + " integer primary key, "
             + KEY_NAME + " text not null, "
             + KEY_ITEM_LISTID + " text not null, "
-            + KEY_PRICE + " text not null "
+            + KEY_PRICE + " text not null, "
+            + KEY_SHARED + " text not null "
             + ");";
     private static final String CREATE_TABLE_FRIENDS =
             "create table " + FRIENDS_TABLE
@@ -130,12 +132,13 @@ public class DBAdapter {
 		return db.insert(DATABASE_TABLE, null, initialValues);
 	}
 
-    public long insertRow_to_Items(String name, String item_listid, String price){
+    public long insertRow_to_Items(String name, String item_listid, String price, String shared){
         ContentValues initialValues = new ContentValues();
         //initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_ITEM_LISTID, item_listid);
         initialValues.put(KEY_PRICE, price);
+        initialValues.put(KEY_SHARED, shared);
 
         return db.insert(DATABASE_ITEMS, null, initialValues);
     }
@@ -178,7 +181,7 @@ public class DBAdapter {
     public Cursor getAllItemRows() {
         String where = null;
         Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
-                where, null, null, null, null, null);
+                where, null, null, null, null, null, null);
         if (c != null) {
             c.moveToFirst();
         }
@@ -209,7 +212,31 @@ public class DBAdapter {
     public Cursor getItemRow(long rowId){
         String where = KEY_ITEM_LISTID + "=" + rowId;
         Cursor c = db.query(true, DATABASE_ITEMS, ITEMS,
-                           where, null, null, null, null, null );
+                           where, null, null, null, null, null, null );
+        if (c != null) {
+            c.moveToFirst();
+            c.moveToNext();
+        }
+        return c;
+    }
+
+    public Cursor getItemRowMine(long rowId){
+        String shared = "0";
+        String where = KEY_ITEM_LISTID + "=" + rowId + " AND " + KEY_SHARED + "=" + shared;
+        Cursor c = db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null, null );
+        if (c != null) {
+            c.moveToFirst();
+            c.moveToNext();
+        }
+        return c;
+    }
+
+    public Cursor getItemRowShared(long rowId){
+        String shared = "1";
+        String where = KEY_ITEM_LISTID + "=" + rowId + " AND " + KEY_SHARED + "=" + shared;
+        Cursor c = db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null, null );
         if (c != null) {
             c.moveToFirst();
             c.moveToNext();
