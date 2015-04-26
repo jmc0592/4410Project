@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.parse.ParseObject;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -33,6 +35,7 @@ public class CreateListActivity extends ActionBarActivity {
     private long rowID;
     private float totalPrice = 0.00f;
     private String shared;
+    private boolean priceFound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +121,7 @@ public class CreateListActivity extends ActionBarActivity {
         //dbhelper = new DBAdapter(this);
         //dbhelper.open();
         //Cursor cursor = dbhelper.getAllItemRows();
-        Cursor cursor = dbhelper.getItemRowMine(rowID);
+        Cursor cursor = dbhelper.getItemRowMine(rowID);//get item if it's tagged as mine
         String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
         int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
         SimpleCursorAdapter myCursorAdapter;
@@ -132,7 +135,7 @@ public class CreateListActivity extends ActionBarActivity {
     public void populateListViewShared(String item){
 
             itemsShared.add(item);
-        Cursor cursor = dbhelper.getItemRowShared(rowID);
+        Cursor cursor = dbhelper.getItemRowShared(rowID);//get item if it's tagged as shared
         String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
         int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
         SimpleCursorAdapter myCursorAdapter;
@@ -140,6 +143,18 @@ public class CreateListActivity extends ActionBarActivity {
                 cursor,fieldnames,viewIDs,0);
         ListView mylist = (ListView) findViewById(R.id.listViewShared);
         mylist.setAdapter(myCursorAdapter);
+
+        //online handling
+        if(priceFound)
+        {
+            ParseObject parseObj = new ParseObject("Items");
+            Cursor cursor1 = dbhelper.getRow(rowID);//get row from current rowID
+            String listName = cursor1.getString(DBAdapter.COL_NAME);
+            parseObj.put("listName", listName);
+            parseObj.put("itemName", item);
+            parseObj.put("price", cPrice);
+            parseObj.saveInBackground();
+        }
     }
 
     public void addToTotal(String addPrice){
@@ -180,19 +195,23 @@ public class CreateListActivity extends ActionBarActivity {
             cursor.moveToLast();
             long id = cursor.getLong(DBAdapter.COL_ROWID);//get id of entered item
             dbhelper.updateItemPrice(id, cPrice);//update price in database
-            if(!price.equals("Price not found."))
+            if(!price.equals("Price not found.")) {
+                priceFound = true;
                 addToTotal(cPrice);
+            }
             //choose which listview to refresh
             if(shared.equals("0"))
                 populateListViewMine(cTemp);//repopulate listview
             else
                 populateListViewShared(cTemp);
+
             //toasts for debugging purposes
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(getApplicationContext(), cPrice, duration);
             toast.show();
 
             cPrice = "";//reset to blank input
+            priceFound = false;
         }
     }
 }
