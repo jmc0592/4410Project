@@ -6,11 +6,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
 * Created by Jacob on 3/1/2015.
 */
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements View.OnClickListener {
+    Button addFriend;
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -37,6 +41,8 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_friend, container, false);
+        addFriend = (Button) rootView.findViewById(R.id.btnAddFriend);
+        addFriend.setOnClickListener(this);
         return rootView;
     }
 
@@ -45,5 +51,10 @@ public class FriendsFragment extends Fragment {
         super.onAttach(activity);
         ((ListActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+    public void onClick(View rootView){
+        EditText friendName;
+        //friendName = (EditText) rootView.findViewById(R.id.friendNameEditText);
+        Toast.makeText(getActivity(), "pressed", Toast.LENGTH_LONG).show();
     }
 }

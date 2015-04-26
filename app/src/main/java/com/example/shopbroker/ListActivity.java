@@ -17,9 +17,12 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.ParseException;
@@ -174,9 +177,10 @@ public class ListActivity extends ActionBarActivity
         populatelistview();
     }
     public void onClick_DisplayLists(View v){
-        displayText("Clicked display lists");
-        Cursor cursor = myDb.getAllRows();
-        displayRecordset(cursor);
+        //displayText("Clicked display lists");
+        //Cursor cursor = myDb.getAllRows();
+        //displayRecordset(cursor);
+        shareList();
     }
     //Database related. List[]
     @Override
@@ -243,6 +247,33 @@ public class ListActivity extends ActionBarActivity
                 else{//if the exception gets thrown
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+    public void shareList(){
+        ParseQuery<ParseUser> userquery = ParseUser.getQuery();
+        ParseQuery<ParseObject> listquery = ParseQuery.getQuery("TestObject");
+
+        userquery.getInBackground("IduDOmBDh4", new GetCallback<ParseUser>() {
+            @Override
+            public void done(final ParseUser parseUser, com.parse.ParseException e) {
+            if(e==null) {
+                ParseQuery<ParseObject> listquery = ParseQuery.getQuery("TestObject");
+
+                listquery.whereEqualTo("ListName", "ok");
+                listquery.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject ListObject, com.parse.ParseException e) {
+                        if (ListObject == null) {
+                            //failed
+                        } else {
+                            ParseRelation<ParseObject> relation = ListObject.getRelation("SharedBy");
+                            relation.add(parseUser);
+                            ListObject.saveInBackground();
+                        }
+                    }
+                });
+            }
             }
         });
     }

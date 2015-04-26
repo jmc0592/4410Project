@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 //parse to JSON to sql DB
@@ -105,6 +106,8 @@ public class ListsFragment extends Fragment {
    // testObject.saveInBackground();
     private void toParse(long id) {
         ParseObject testObject = new ParseObject("TestObject");
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseObject> relation = testObject.getRelation("SharedBy");
         //testObject.WhereEqualTo("rowID", urowID);
         Cursor cursor = dbhelper.getRow(id);
         if(cursor.moveToFirst()){
@@ -115,6 +118,7 @@ public class ListsFragment extends Fragment {
             testObject.put("rowID", rowid);
             testObject.put("ListName", name);
             testObject.put("Date", date);
+            relation.add(currentUser);
             testObject.saveInBackground();
         }
         cursor.close();
