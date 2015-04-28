@@ -32,21 +32,26 @@ public class DBAdapter {
 	public static final String KEY_DATEADDED = "dateAdded";
     public static final String KEY_ITEM_LISTID = "itemListId";
     public static final String KEY_PRICE = "price";
+    public static final String KEY_OBJID = "objectID";
+
     public static final String KEY_SHARED = "shared";
 	
 	// TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
 	public static final int COL_NAME = 1;
 	public static final int COL_DATEADDED = 2;
     public static final int COL_ITEM_LISTID = 2;
+    public static final int COL_OBJID = 2;
 
 	
 	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
+    public static final String[] FRIENDS = new String[] {KEY_ROWID, KEY_NAME, KEY_OBJID};
     public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_PRICE, KEY_SHARED};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
     public static final String DATABASE_ITEMS = "grocery_items";
+    public static final String FRIENDS_TABLE = "friend_Table";
 	// Track DB version if a new version of your app changes the format.
 	public static final int DATABASE_VERSION = 25;
 	
@@ -77,6 +82,12 @@ public class DBAdapter {
             + KEY_ITEM_LISTID + " text not null, "
             + KEY_PRICE + " text not null, "
             + KEY_SHARED + " text not null "
+            + ");";
+    private static final String CREATE_TABLE_FRIENDS =
+            "create table " + FRIENDS_TABLE
+            +" (" + KEY_ROWID + " interger primary key, "
+            + KEY_NAME + " text not null, "
+            + KEY_OBJID + " text not null"
             + ");";
 	// Context of application who uses us.
 	private final Context context;
@@ -131,6 +142,14 @@ public class DBAdapter {
 
         return db.insert(DATABASE_ITEMS, null, initialValues);
     }
+    public long insertRow_to_Friends(String name, String objID){
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(KEY_NAME, name);
+        initialValues.put(KEY_OBJID, objID);
+
+        return db.insert(FRIENDS_TABLE, null, initialValues);
+    }
 	
 	// Delete a row from the database, by rowId (primary key)
 	public boolean deleteRow(long rowId) {
@@ -164,6 +183,16 @@ public class DBAdapter {
         Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
                 where, null, null, null, null, null, null);
         if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllFriendRows(){
+        String where = null;
+        Cursor c = db.query(true, FRIENDS_TABLE, FRIENDS,
+                where, null, null, null, null, null);
+        if (c != null){
             c.moveToFirst();
         }
         return c;
@@ -244,6 +273,12 @@ public class DBAdapter {
         return db.update(DATABASE_ITEMS, newValues, where, null) != 0;
     }
 	
+//	public boolean updateItemPrice(long rowId, String price){
+       // String where = KEY_ROWID + "=" + rowId;
+       // ContentValues newValues = new ContentValues();
+      //  newValues.put(KEY_PRICE, )
+ //   }
+	
 	/////////////////////////////////////////////////////////////////////
 	//	Private Helper Classes:
 	/////////////////////////////////////////////////////////////////////
@@ -262,6 +297,7 @@ public class DBAdapter {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE_SQL);
             db.execSQL(CREATE_TABLE_ITEMS);
+            db.execSQL(CREATE_TABLE_FRIENDS);
 		}
 
 		@Override
@@ -272,6 +308,7 @@ public class DBAdapter {
 			// Destroy old database:
 			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_ITEMS);
+            db.execSQL("DROP TABLE IF EXISTS " + FRIENDS_TABLE);
 			
 			// Recreate new database:
 			onCreate(db);
