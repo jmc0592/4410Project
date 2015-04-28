@@ -10,6 +10,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -36,6 +38,9 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 
 /**
@@ -112,6 +117,14 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mEmailRegistrationButton = (Button) findViewById(R.id.email_registration_button);
+        mEmailRegistrationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registration();///////////////////////////////////////////////////////////////registration
             }
         });
 
@@ -415,6 +428,39 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 }
             }
         });
+    }
+
+    public void registration(){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        final EditText edittext= new EditText(getApplicationContext());
+
+        alert.setMessage("Enter Desired Username");
+        alert.setTitle("Registration Form");
+
+        edittext.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+        edittext.setHintTextColor(Color.GRAY);
+        edittext.setHintTextColor(Color.GREEN);
+        alert.setView(edittext);
+
+
+        alert.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //What ever you want to do with the value
+                //String YouEditTextValue = edittext.getText();
+                String username = edittext.getText().toString();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+                return;
+            }
+        });
+
+        alert.show();
     }
 
 }
