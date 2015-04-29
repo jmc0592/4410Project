@@ -12,7 +12,6 @@ import android.util.Log;
 import java.sql.SQLException;
 import java.util.List;
 
-// Search for "TODO", and make the appropriate changes.
 public class DBAdapter {
 
 	/////////////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ public class DBAdapter {
     public static final String DATABASE_ITEMS = "grocery_items";
     public static final String FRIENDS_TABLE = "friend_Table";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 25;
+	public static final int DATABASE_VERSION = 28;
 	
 	private static final String DATABASE_CREATE_SQL = 
 			"create table " + DATABASE_TABLE 
@@ -118,11 +117,6 @@ public class DBAdapter {
 	
 	// Add a new set of values to the database.
 	public long insertRow(String name, String dateAdded) {
-		/*
-		 * CHANGE 3:
-		 */		
-		// TODO: Update data in the row with new fields.
-		// TODO: Also change the function's arguments to be what you need!
 		// Create row's data:
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
@@ -134,7 +128,6 @@ public class DBAdapter {
 
     public long insertRow_to_Items(String name, String item_listid, String price, String shared){
         ContentValues initialValues = new ContentValues();
-        //initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_NAME,name);
         initialValues.put(KEY_ITEM_LISTID, item_listid);
         initialValues.put(KEY_PRICE, price);
@@ -180,6 +173,30 @@ public class DBAdapter {
 	}
     public Cursor getAllItemRows() {
         String where = null;
+        Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllMineRows(long rowID) {
+        String sRowID = Long.toString(rowID);
+        String shared = "0";
+        String where = KEY_SHARED + "=" + shared + " AND " + KEY_ITEM_LISTID + "=" + sRowID;
+        Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllSharedRows(long rowID) {
+        String sRowID = Long.toString(rowID);
+        String shared = "1";
+        String where = KEY_SHARED + "=" + shared + " AND " + KEY_ITEM_LISTID + "=" + sRowID;
         Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
                 where, null, null, null, null, null, null);
         if (c != null) {
@@ -249,11 +266,6 @@ public class DBAdapter {
 	public boolean updateRow(long rowId, String name, String dateAdded) {
 		String where = KEY_ROWID + "=" + rowId;
 
-		/*
-		 * CHANGE 4:
-		 */
-		// TODO: Update data in the row with new fields.
-		// TODO: Also change the function's arguments to be what you need!
 		// Create row's data:
 		ContentValues newValues = new ContentValues();
 		newValues.put(KEY_NAME, name);
@@ -272,12 +284,6 @@ public class DBAdapter {
         //insert into database
         return db.update(DATABASE_ITEMS, newValues, where, null) != 0;
     }
-	
-//	public boolean updateItemPrice(long rowId, String price){
-       // String where = KEY_ROWID + "=" + rowId;
-       // ContentValues newValues = new ContentValues();
-      //  newValues.put(KEY_PRICE, )
- //   }
 	
 	/////////////////////////////////////////////////////////////////////
 	//	Private Helper Classes:
