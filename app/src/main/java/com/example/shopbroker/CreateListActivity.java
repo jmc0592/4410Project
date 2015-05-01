@@ -57,6 +57,8 @@ public class CreateListActivity extends ActionBarActivity {
 
         dbhelper = new DBAdapter(this);
         dbhelper.open();
+        populateListViewShared(rowID);
+        populateListViewMine(rowID);
     }
 
 
@@ -115,6 +117,30 @@ public class CreateListActivity extends ActionBarActivity {
         //more methods and things for updating online database in the future
     }
 
+    //overloaded for onCreate list populate
+    public void populateListViewMine(long id){
+        Cursor cursor = dbhelper.getAllMineRows(id);//get item if it's tagged as mine
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
+        int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
+                cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) findViewById(R.id.listViewMine);
+        mylist.setAdapter(myCursorAdapter);
+    }
+
+    //overloaded for onCreate list populate
+    public void populateListViewShared(long id){
+        Cursor cursor = dbhelper.getAllSharedRows(id);//get item if it's tagged as shared
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME,DBAdapter.KEY_ITEM_LISTID, DBAdapter.KEY_PRICE, DBAdapter.KEY_SHARED};
+        int[] viewIDs = new int[]{R.id.item,R.id.textView, R.id.price};
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
+                cursor,fieldnames,viewIDs,0);
+        ListView mylist = (ListView) findViewById(R.id.listViewShared);
+        mylist.setAdapter(myCursorAdapter);
+
+    }
     //create list view for Mine
     public void populateListViewMine(String item){
             itemsMine.add(item);
