@@ -65,6 +65,13 @@
                     android:textStyle="bold"
                     android:background="@color/wallet_holo_blue_light" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skip to ListActivity"
+                    android:id="@+id/skip_button"
+                    android:layout_gravity="center_horizontal" />
+
                 <Space
                     android:layout_width="415dp"
                     android:layout_height="58dp"

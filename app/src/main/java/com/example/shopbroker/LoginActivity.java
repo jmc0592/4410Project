@@ -131,6 +131,17 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 registration();///////////////////////////////////////////////////////////////registration
             }
         });
+/////////////////////////////////////Test skip button for testing purposes
+        Button skip = (Button) findViewById(R.id.skip_button);
+        skip.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "You did not log in.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                startActivity(intent);
+            }
+        });
+///////////////////////////////////////////end of temp skip button
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
