@@ -12,12 +12,14 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
 
 
 /**
@@ -434,22 +438,50 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        final EditText edittext= new EditText(getApplicationContext());
+        LinearLayout lila1= new LinearLayout(this);
+        lila1.setOrientation(LinearLayout.VERTICAL);
+        final EditText inputEmail = new EditText(this);
+        final EditText inputPassword1 = new EditText(this);
+        final EditText inputPassword2 = new EditText(this);
+        lila1.addView(inputEmail);
+        lila1.addView(inputPassword1);
+        lila1.addView(inputPassword2);
 
-        alert.setMessage("Enter Desired Username");
+        inputEmail.setHint("Desired Username");
+        //inputEmail.setText("Desired_Username", TextView.BufferType.EDITABLE);
+        inputEmail.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+        inputEmail.setTextColor(Color.GRAY);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        inputPassword1.setHint("Desired Password");
+       // inputPassword1.setText("Desired_Password", TextView.BufferType.EDITABLE);
+        inputPassword1.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        inputPassword1.setTextColor(Color.GRAY);
+        inputPassword1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        inputPassword2.setHint("Re-Enter Password");
+        //inputPassword2.setText("Re-enter_Password", TextView.BufferType.EDITABLE);
+        inputPassword2.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        inputPassword2.setTextColor(Color.GRAY);
+        inputPassword2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        //final EditText edittext= new EditText(getApplicationContext());
+        //final EditText edittext2= new EditText(getApplicationContext());
+
+
+
+        //alert.setMessage("Enter Desired Username");
         alert.setTitle("Registration Form");
-
-        edittext.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
-        edittext.setHintTextColor(Color.GRAY);
-        edittext.setHintTextColor(Color.GREEN);
-        alert.setView(edittext);
+        alert.setView(lila1);
 
 
         alert.setPositiveButton("Register", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //What ever you want to do with the value
                 //String YouEditTextValue = edittext.getText();
-                String username = edittext.getText().toString();
+                String username = inputEmail.getText().toString();
+                String password1 = inputPassword1.getText().toString();
+                String password2 = inputPassword2.getText().toString();
             }
         });
 
