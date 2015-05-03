@@ -61,13 +61,31 @@ public class CreateListActivity extends ActionBarActivity {
         //load lists on activity start
         populateListViewShared(rowID);
         populateListViewMine(rowID);
+        calculateTotal();
 
-        ListView listMine = (ListView) findViewById(R.id.listViewMine);
         ListView listShared = (ListView) findViewById(R.id.listViewShared);
-        listMine.setItemsCanFocus(true);
+        ListView listMine = (ListView) findViewById(R.id.listViewMine);
 
+        //check for long press on listview item
+       listMine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+               dbhelper.deleteItemRow(id);//delete item from DB
+               populateListViewMine(rowID);//repopulate view
+               calculateTotal();
+               return true;
+           }
+       });
 
-
+        listShared.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                dbhelper.deleteItemRow(id);
+                populateListViewShared(rowID);
+                calculateTotal();
+                return true;
+            }
+        });
 
     }
 
@@ -205,18 +223,29 @@ public class CreateListActivity extends ActionBarActivity {
         totalText.setText(totalPriceChar);
     }
 
-    public void delItem(View v){
-        Toast toast = Toast.makeText(this, "delete", Toast.LENGTH_SHORT);
-        toast.show();
+    public void calculateTotal(){
+        Cursor cur = dbhelper.getAllItemRows(rowID);
+        String total;
+        float totalF = 0.00f;
+        totalPrice = 0.00f;
 
-        ListView listMine = (ListView) findViewById(R.id.listViewMine);
-        listMine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast1 = Toast.makeText(getApplicationContext(), "listener", Toast.LENGTH_SHORT);
-                toast1.show();
-            }
-        });
+        cur.moveToFirst();
+        while (cur.isAfterLast() == false) {
+            total = cur.getString(cur.getColumnIndex("price"));
+            if(total.equals("Price not found."))
+                totalPrice += 0.00f;
+            else
+                totalPrice += Float.parseFloat(total);
+            cur.moveToNext();
+        }
+
+        //format float and convert to string
+        BigDecimal totalFormatted = new BigDecimal(totalPrice).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        total = Float.toString(totalFormatted.floatValue());
+        //update textview
+        TextView totalText = (TextView) findViewById(R.id.totalNumeric);
+        totalText.setText(total);
+
     }
 
     /**

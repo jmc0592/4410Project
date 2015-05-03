@@ -149,6 +149,11 @@ public class DBAdapter {
 		String where = KEY_ROWID + "=" + rowId;
 		return db.delete(DATABASE_TABLE, where, null) != 0;
 	}
+
+    public boolean deleteItemRow(long rowid){
+        String where = KEY_ROWID + "=" + rowid;
+        return db.delete(DATABASE_ITEMS, where, null) != 0;
+    }
 	
 	public void deleteAll() {
 		Cursor c = getAllRows();
@@ -173,6 +178,16 @@ public class DBAdapter {
 	}
     public Cursor getAllItemRows() {
         String where = null;
+        Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
+                where, null, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllItemRows(long listid) {
+        String where = KEY_ITEM_LISTID + "=" + listid;
         Cursor c = 	db.query(true, DATABASE_ITEMS, ITEMS,
                 where, null, null, null, null, null, null);
         if (c != null) {
