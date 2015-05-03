@@ -148,6 +148,11 @@ public class ListActivity extends ActionBarActivity
             return true;
         }
 
+        else if(id == R.id.action_login) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
+        }
         return super.onOptionsItemSelected(item);
     }
     // called when button is pressed

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -57,8 +58,17 @@ public class CreateListActivity extends ActionBarActivity {
 
         dbhelper = new DBAdapter(this);
         dbhelper.open();
+        //load lists on activity start
         populateListViewShared(rowID);
         populateListViewMine(rowID);
+
+        ListView listMine = (ListView) findViewById(R.id.listViewMine);
+        ListView listShared = (ListView) findViewById(R.id.listViewShared);
+        listMine.setItemsCanFocus(true);
+
+
+
+
     }
 
 
@@ -193,6 +203,20 @@ public class CreateListActivity extends ActionBarActivity {
         //update textView
         TextView totalText = (TextView) findViewById(R.id.totalNumeric);
         totalText.setText(totalPriceChar);
+    }
+
+    public void delItem(View v){
+        Toast toast = Toast.makeText(this, "delete", Toast.LENGTH_SHORT);
+        toast.show();
+
+        ListView listMine = (ListView) findViewById(R.id.listViewMine);
+        listMine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast toast1 = Toast.makeText(getApplicationContext(), "listener", Toast.LENGTH_SHORT);
+                toast1.show();
+            }
+        });
     }
 
     /**
