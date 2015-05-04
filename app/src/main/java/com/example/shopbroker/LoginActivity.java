@@ -456,7 +456,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         });
     }
 
-   
+
     public void registration(){
 
 
@@ -491,8 +491,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         inputPassword2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         //alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        //final EditText edittext= new EditText(getApplicationContext());
-        //final EditText edittext2= new EditText(getApplicationContext());
+
 
 
 
@@ -527,12 +526,14 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                                 // Sign up didn't succeed. Look at the ParseException
                                 // to figure out what went wrong
                                 //inputEmail.setError(getString(R.string.error_invalid_email));
+                                inputEmail.setError(getString(R.string.error_invalid_email));
                                 Toast.makeText(getApplicationContext(), "Username is already in use.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 }
                 else{
+                    inputPassword1.setError(getString(R.string.error_invalid_email));
                     Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_LONG).show();
                 }
 
@@ -577,8 +578,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             }
         });
 
-
-        alert.show();
+        AlertDialog myAlert=alert.create();
+        myAlert.show();
+        //alert.show();
 
     }
 
