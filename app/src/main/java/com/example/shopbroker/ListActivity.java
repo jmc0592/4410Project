@@ -186,6 +186,10 @@ public class ListActivity extends ActionBarActivity
         //displayRecordset(cursor);
         shareList();
     }
+
+    public void onClick_AddFriend(View v){
+
+    }
     //Database related. List[]
     @Override
     protected void onDestroy(){

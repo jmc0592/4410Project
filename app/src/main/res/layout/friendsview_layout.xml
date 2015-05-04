@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
          />
 
     <TextView
@@ -24,6 +25,7 @@
         android:layout_toEndOf="@+id/friendName"
         android:layout_marginLeft="20dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"/>
 
 </RelativeLayout>
