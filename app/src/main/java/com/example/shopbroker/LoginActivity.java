@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -24,7 +25,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -36,8 +39,16 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.parse.CountCallback;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ParseException;
+import com.parse.SignUpCallback;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -445,9 +456,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         });
     }
 
+
     public void registration(){
 
+
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
 
         LinearLayout lila1= new LinearLayout(this);
         lila1.setOrientation(LinearLayout.VERTICAL);
@@ -457,6 +471,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         lila1.addView(inputEmail);
         lila1.addView(inputPassword1);
         lila1.addView(inputPassword2);
+
 
         inputEmail.setHint("Desired Username");
         //inputEmail.setText("Desired_Username", TextView.BufferType.EDITABLE);
@@ -476,8 +491,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         inputPassword2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         //alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        //final EditText edittext= new EditText(getApplicationContext());
-        //final EditText edittext2= new EditText(getApplicationContext());
+
 
 
 
@@ -486,13 +500,74 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         alert.setView(lila1);
 
 
-        alert.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Register", new DialogInterface.OnClickListener(){
+
             public void onClick(DialogInterface dialog, int whichButton) {
                 //What ever you want to do with the value
                 //String YouEditTextValue = edittext.getText();
-                String username = inputEmail.getText().toString();
-                String password1 = inputPassword1.getText().toString();
-                String password2 = inputPassword2.getText().toString();
+                final String username = inputEmail.getText().toString();
+                final String password1 = inputPassword1.getText().toString();
+                final String password2 = inputPassword2.getText().toString();
+
+                // other fields can be set just like with ParseObject
+                //user.put("phone", "650-253-0000");
+                if(password1.equals(password2)) {
+                    ParseUser user = new ParseUser();
+                    user.setUsername(username);
+                    user.setPassword(password1);
+
+                    user.signUpInBackground(new SignUpCallback() {
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                // Hooray! Let them use the app now.
+                                Toast.makeText(getApplicationContext(), "You can now log in.", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                // Sign up didn't succeed. Look at the ParseException
+                                // to figure out what went wrong
+                                //inputEmail.setError(getString(R.string.error_invalid_email));
+                                inputEmail.setError(getString(R.string.error_invalid_email));
+                                Toast.makeText(getApplicationContext(), "Username is already in use.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    inputPassword1.setError(getString(R.string.error_invalid_email));
+                    Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+                /*ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.whereEqualTo("username", inputEmail.getText().toString());
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    public void done(List<ParseUser> objects, ParseException e) {
+                        if (e == null) {
+                            // The query was successful.
+                            inputEmail.setError(getString(R.string.error_invalid_email));
+                            Toast.makeText(getApplicationContext(), "Username/password invalid.", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            //Username is unique and passwords match.
+                            if(password1 == password2) {
+                                ParseUser User = new ParseUser();
+                                User.put("username", username);
+                                User.put("password", password1);
+                                User.saveInBackground();
+                            }
+                            else {
+                                inputPassword1.setError(getString(R.string.error_invalid_email));
+                                Toast.makeText(getApplicationContext(), "password invalid.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });*/
+
+
+
             }
         });
 
@@ -503,10 +578,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             }
         });
 
-        alert.show();
+        AlertDialog myAlert=alert.create();
+        myAlert.show();
+        //alert.show();
+
     }
 
 }
+
+
 
 
 
