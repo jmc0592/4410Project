@@ -13,7 +13,7 @@ public class App extends Application{
     public void onCreate() {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this);//uses string values from strings.xml
-
+        /*
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -23,6 +23,6 @@ public class App extends Application{
                     Log.e("com.parse.push", "failed to subscribe for push", e);
                 }
             }
-        });
+        });*/
     }
 }

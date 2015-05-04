@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -65,7 +67,15 @@ public class CreateListActivity extends ActionBarActivity {
         ListView listMine = (ListView) findViewById(R.id.listViewMine);
         ListView listShared = (ListView) findViewById(R.id.listViewShared);
         listMine.setItemsCanFocus(true);
+        //ListView listMine = (ListView) findViewById(R.id.listViewMine);
+        listMine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast toast1 = Toast.makeText(getApplicationContext(), "listener", Toast.LENGTH_SHORT);
+                toast1.show();
 
+            }
+        });
 
 
 
@@ -90,8 +100,24 @@ public class CreateListActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.addNew){
+            showFriends();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showFriends(){
+        //Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Cursor cursor = dbhelper.getAllFriendRows();
+        String[] fieldnames = new String[]{DBAdapter.KEY_NAME};
+        int[] viewIDs = new int[]{R.id.item};
+        SpinnerAdapter spinnerAdapter = new SimpleCursorAdapter(this,R.layout.listview_create_list,
+                cursor,fieldnames,viewIDs,0);
+
+        //spinnerAdapter.getDropDownView(android.R.layout.simple_spinner_dropdown_item);
+
     }
 
     //onClick for Mine button
@@ -209,14 +235,7 @@ public class CreateListActivity extends ActionBarActivity {
         Toast toast = Toast.makeText(this, "delete", Toast.LENGTH_SHORT);
         toast.show();
 
-        ListView listMine = (ListView) findViewById(R.id.listViewMine);
-        listMine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast1 = Toast.makeText(getApplicationContext(), "listener", Toast.LENGTH_SHORT);
-                toast1.show();
-            }
-        });
+
     }
 
     /**
