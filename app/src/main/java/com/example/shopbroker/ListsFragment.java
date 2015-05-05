@@ -77,7 +77,7 @@ public class ListsFragment extends Fragment {
                 intent.putExtra("ID",id);
                 startActivity(intent);//added this back to it goes to activity
                 updateItem(id);
-                ShowCurrentUser();
+               // ShowCurrentUser();
                // displayToast(id);
                //toParse(id); //Adds the Row in the "list" table to Parse
 

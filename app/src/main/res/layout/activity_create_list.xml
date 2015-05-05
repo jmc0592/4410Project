@@ -66,7 +66,8 @@
         android:orientation="vertical"
         android:weightSum="1"
         android:layout_below="@+id/buttonMine"
-        android:paddingTop="2dp">
+        android:paddingTop="2dp"
+        android:id="@+id/linearLayout">
         <LinearLayout
             android:id="@+id/mineLinearL"
             android:orientation="vertical"
@@ -110,5 +111,4 @@
             </ListView>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>
