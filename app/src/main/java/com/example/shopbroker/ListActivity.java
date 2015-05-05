@@ -156,8 +156,10 @@ public class ListActivity extends ActionBarActivity
         else if(id == R.id.action_Logout) {
             ParseUser.logOut();
             ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Toast toast = Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT);
+            toast.show();
+            //Intent intent = new Intent(this, LoginActivity.class);
+            //startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

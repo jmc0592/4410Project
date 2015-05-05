@@ -51,8 +51,7 @@
         android:layout_toRightOf="@+id/buttonMine"
         android:layout_alignTop="@+id/buttonMine"
         android:background="#ccff8d5f"
-        android:typeface="serif"
-        android:clickable="false" />
+        android:typeface="serif" />
     <EditText
         android:id="@+id/editTextItem"
         android:layout_width="fill_parent"

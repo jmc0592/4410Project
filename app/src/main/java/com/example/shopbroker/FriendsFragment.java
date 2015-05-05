@@ -83,8 +83,8 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                 if(parseUser == null){
                     //fail
                     Toast.makeText(getActivity(), "not found", Toast.LENGTH_LONG).show();
-                    dbhelper.insertRow_to_Friends(tempName, "null");
-                    populatefriendView(getView());
+                    //dbhelper.insertRow_to_Friends(tempName, "null");
+                    //populatefriendView(getView());
                     friendName.setText("");
                 }
                 else{
