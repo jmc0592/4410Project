@@ -153,6 +153,12 @@ public class ListActivity extends ActionBarActivity
             startActivity(intent);
 
         }
+        else if(id == R.id.action_Logout) {
+            ParseUser.logOut();
+            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
     // called when button is pressed
