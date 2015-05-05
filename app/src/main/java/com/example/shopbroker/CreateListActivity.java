@@ -1,5 +1,6 @@
 package com.example.shopbroker;
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -15,13 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -30,6 +40,8 @@ public class CreateListActivity extends ActionBarActivity {
     //Activity scope variables
     private ArrayList<String> itemsShared = new ArrayList<String>();
     private ArrayList<String> itemsMine = new ArrayList<String>();
+    private ArrayList<String> sharedwith = new ArrayList<String>();
+    private ArrayList<String> objectid = new ArrayList<String>();
     private String cPrice = "";
     private String cTemp;
     private DBAdapter dbhelper;
@@ -62,6 +74,7 @@ public class CreateListActivity extends ActionBarActivity {
         populateListViewShared(rowID);
         populateListViewMine(rowID);
         calculateTotal();
+        checkShared(rowID);
 
         ListView listShared = (ListView) findViewById(R.id.listViewShared);
         ListView listMine = (ListView) findViewById(R.id.listViewMine);
@@ -108,8 +121,49 @@ public class CreateListActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.addNew){
+            showFriends();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showFriends(){
+        View friends = this.findViewById(R.id.addNew);
+        PopupMenu popmenu = new PopupMenu(this,friends);
+        Cursor cursor = dbhelper.getAllFriendRows();
+        //final String[] fieldnames = new String[]{DBAdapter.KEY_NAME};
+        final ArrayList<String> fieldnames = new ArrayList<String>();
+        final ArrayList<String> objID = new ArrayList<String>();
+        int i=0;
+        if(cursor.moveToFirst() ){
+            //process the data
+            do {
+                if(!sharedwith.contains(cursor.getString(DBAdapter.COL_NAME))) {
+                    //fieldnames[i] = cursor.getString(DBAdapter.COL_NAME);
+                    fieldnames.add(cursor.getString(DBAdapter.COL_NAME));
+                    objID.add(cursor.getString(DBAdapter.COL_OBJID));
+                    String s = fieldnames.get(i);
+                    popmenu.getMenu().add(0, i, i, s);
+                    i++;
+                }
+            }while(cursor.moveToNext());
+        }
+        popmenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String s = fieldnames.get(item.getItemId());
+                String o = objID.get(item.getItemId());
+                //Toast.makeText(getApplicationContext(),s+o,Toast.LENGTH_LONG).show();
+                dbhelper.insertRow_to_ListFriend(s, String.valueOf(rowID), o);
+                sharedwith.add(s);
+                objectid.add(o);
+                return false;
+            }
+        });
+        popmenu.show();
+        //Toast.makeText(getApplicationContext(),"add",Toast.LENGTH_LONG).show();
     }
 
     //onClick for Mine button
@@ -129,7 +183,7 @@ public class CreateListActivity extends ActionBarActivity {
     }
 
     //onClick for Shared Button
-    public void addToShared(View v){
+    public void addToShared(View v) throws ParseException {
         shared = "1";
         TextView itemET = (TextView) findViewById(R.id.editTextItem);
         cTemp = itemET.getText().toString();
@@ -186,7 +240,7 @@ public class CreateListActivity extends ActionBarActivity {
     }
 
     //create list view for shared
-    public void populateListViewShared(String item){
+    public void populateListViewShared(String item) throws ParseException {
 
             itemsShared.add(item);
         Cursor cursor = dbhelper.getItemRowShared(rowID);//get item if it's tagged as shared
@@ -201,7 +255,19 @@ public class CreateListActivity extends ActionBarActivity {
         //online handling
         if(priceFound)
         {
-            ParseObject parseObj = new ParseObject("Items");
+            final ParseObject parseObj = new ParseObject("Items");
+            ParseRelation<ParseObject> relation = parseObj.getRelation("SharedBy");
+            ParseQuery<ParseUser> userquery = ParseUser.getQuery();
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            for(int i =0 ; i<objectid.size(); i++){
+               final String s = objectid.get(i);
+               ParseUser user = userquery.get(s);
+               //String w = user.getString("username");
+               //Toast.makeText(getApplicationContext(),w,Toast.LENGTH_SHORT).show();
+               relation.add(user);
+
+            }
+            relation.add(currentUser);
             Cursor cursor1 = dbhelper.getRow(rowID);//get row from current rowID
             String listName = cursor1.getString(DBAdapter.COL_NAME);
             parseObj.put("listName", listName);
@@ -282,7 +348,11 @@ public class CreateListActivity extends ActionBarActivity {
             if(shared.equals("0"))
                 populateListViewMine(cTemp);//repopulate listview
             else
-                populateListViewShared(cTemp);
+                try {
+                    populateListViewShared(cTemp);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
             //toasts for debugging purposes
             int duration = Toast.LENGTH_SHORT;
@@ -291,6 +361,16 @@ public class CreateListActivity extends ActionBarActivity {
 
             cPrice = "";//reset to blank input
             priceFound = false;
+        }
+    }
+    public void checkShared(long id){
+       Cursor cursor = dbhelper.getAllListFriRows(id);
+        if(cursor.moveToFirst()){
+            //process the data
+            do {
+                sharedwith.add(cursor.getString(DBAdapter.COL_NAME));
+                objectid.add(cursor.getString(DBAdapter.COL_OBJID));
+            }while(cursor.moveToNext());
         }
     }
 }

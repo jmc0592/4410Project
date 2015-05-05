@@ -45,16 +45,18 @@ public class DBAdapter {
 	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_DATEADDED};
     public static final String[] FRIENDS = new String[] {KEY_ROWID, KEY_NAME, KEY_OBJID};
     public static final String[] ITEMS = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_PRICE, KEY_SHARED};
+    public static final String[] LISTFRIEND = new String[] {KEY_ROWID, KEY_NAME, KEY_ITEM_LISTID, KEY_OBJID};
 	
 	// DB info: it's name, and the table we are using (just one).
 	public static final String DATABASE_NAME = "MyDb";
 	public static final String DATABASE_TABLE = "mainTable";
     public static final String DATABASE_ITEMS = "grocery_items";
     public static final String FRIENDS_TABLE = "friend_Table";
+    public static final String LISTFRI_TABLE = "listfriend_Table";
 	// Track DB version if a new version of your app changes the format.
-	public static final int DATABASE_VERSION = 28;
+	public static final int DATABASE_VERSION = 31;
 	
-	private static final String DATABASE_CREATE_SQL = 
+	private static final String DATABASE_CREATE_SQL =
 			"create table " + DATABASE_TABLE 
 			+ " (" + KEY_ROWID + " integer primary key autoincrement, "
 			
@@ -86,6 +88,13 @@ public class DBAdapter {
             "create table " + FRIENDS_TABLE
             +" (" + KEY_ROWID + " interger primary key, "
             + KEY_NAME + " text not null, "
+            + KEY_OBJID + " text not null"
+            + ");";
+    private static final String CREATE_TABLE_LF =
+            "create table " + LISTFRI_TABLE
+            + " (" + KEY_ROWID + " integer primary key, "
+            + KEY_NAME + " text not null, "
+            + KEY_ITEM_LISTID + " text not null, "
             + KEY_OBJID + " text not null"
             + ");";
 	// Context of application who uses us.
@@ -143,7 +152,16 @@ public class DBAdapter {
 
         return db.insert(FRIENDS_TABLE, null, initialValues);
     }
-	
+
+    public long insertRow_to_ListFriend(String name, String listid, String objid){
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(KEY_NAME, name);
+        initialValues.put(KEY_ITEM_LISTID, listid);
+        initialValues.put(KEY_OBJID, objid);
+
+        return db.insert(LISTFRI_TABLE, null, initialValues);
+    }
 	// Delete a row from the database, by rowId (primary key)
 	public boolean deleteRow(long rowId) {
 		String where = KEY_ROWID + "=" + rowId;
@@ -225,6 +243,17 @@ public class DBAdapter {
         Cursor c = db.query(true, FRIENDS_TABLE, FRIENDS,
                 where, null, null, null, null, null);
         if (c != null){
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllListFriRows(long rowID){
+        String sRowID = Long.toString(rowID);
+        String where = KEY_ITEM_LISTID + "=" + sRowID;
+        Cursor c = db.query(true, LISTFRI_TABLE, LISTFRIEND,
+                where, null, null, null, null, null, null);
+        if(c != null){
             c.moveToFirst();
         }
         return c;
@@ -319,6 +348,7 @@ public class DBAdapter {
 			db.execSQL(DATABASE_CREATE_SQL);
             db.execSQL(CREATE_TABLE_ITEMS);
             db.execSQL(CREATE_TABLE_FRIENDS);
+            db.execSQL(CREATE_TABLE_LF);
 		}
 
 		@Override
@@ -330,7 +360,7 @@ public class DBAdapter {
 			db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_ITEMS);
             db.execSQL("DROP TABLE IF EXISTS " + FRIENDS_TABLE);
-			
+            db.execSQL("DROP TABLE IF EXISTS " + LISTFRI_TABLE);
 			// Recreate new database:
 			onCreate(db);
 		}

@@ -17,7 +17,8 @@
         android:layout_centerHorizontal="true"
         android:background="#ff9fff75"
         android:backgroundTint="#ff9fff75"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,7 +65,9 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:weightSum="1"
-        android:layout_below="@+id/buttonMine">
+        android:layout_below="@+id/buttonMine"
+        android:paddingTop="2dp"
+        android:id="@+id/linearLayout">
         <LinearLayout
             android:id="@+id/mineLinearL"
             android:orientation="vertical"
@@ -77,7 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mine"
-                android:id="@+id/mineText" />
+                android:id="@+id/mineText"
+                android:textStyle="bold" />
             <ListView
                 android:id="@+id/listViewMine"
                 android:layout_width="match_parent"
@@ -97,7 +101,8 @@
                 android:text="@string/shared"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/sharedText" />
+                android:id="@+id/sharedText"
+                android:textStyle="bold" />
             <ListView
                 android:id="@+id/listViewShared"
                 android:layout_width="match_parent"
@@ -106,5 +111,4 @@
             </ListView>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>
