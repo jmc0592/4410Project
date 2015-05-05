@@ -1,12 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    //<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    //    <!-- Customize your theme here. -->
-    //</style>
-
-    <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <!-- Customize your theme here. -->
     </style>
+
+
 
 </resources>

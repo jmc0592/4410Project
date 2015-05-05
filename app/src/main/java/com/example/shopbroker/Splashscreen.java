@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import com.parse.ParseUser;
 import com.parse.ParseException;
 
-
 public class Splashscreen extends ActionBarActivity {
 
     @Override
