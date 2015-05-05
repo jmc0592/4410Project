@@ -511,32 +511,34 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
                 // other fields can be set just like with ParseObject
                 //user.put("phone", "650-253-0000");
-                if(password1.equals(password2)) {
-                    ParseUser user = new ParseUser();
-                    user.setUsername(username);
-                    user.setPassword(password1);
+                if (password1.equals(password2)) {
+                    if(isPasswordValid(password1)) {
+                        ParseUser user = new ParseUser();
+                        user.setUsername(username);
+                        user.setPassword(password1);
 
-                    user.signUpInBackground(new SignUpCallback() {
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                // Hooray! Let them use the app now.
-                                Toast.makeText(getApplicationContext(), "You can now log in.", Toast.LENGTH_LONG).show();
+                        user.signUpInBackground(new SignUpCallback() {
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    // Hooray! Let them use the app now.
+                                    Toast.makeText(getApplicationContext(), "You can now log in.", Toast.LENGTH_LONG).show();
+                                } else {
+                                    // Sign up didn't succeed. Look at the ParseException
+                                    // to figure out what went wrong
+                                    //inputEmail.setError(getString(R.string.error_invalid_email));
+                                    inputEmail.setError(getString(R.string.error_invalid_email));
+                                    Toast.makeText(getApplicationContext(), "Username is already in use.", Toast.LENGTH_LONG).show();
+                                }
                             }
-                            else {
-                                // Sign up didn't succeed. Look at the ParseException
-                                // to figure out what went wrong
-                                //inputEmail.setError(getString(R.string.error_invalid_email));
-                                inputEmail.setError(getString(R.string.error_invalid_email));
-                                Toast.makeText(getApplicationContext(), "Username is already in use.", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+                        });
+                    } else {
+                        inputPassword1.setError(getString(R.string.error_invalid_email));
+                        Toast.makeText(getApplicationContext(), "Password is too short.", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                   inputPassword1.setError(getString(R.string.error_invalid_email));
+                   Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_LONG).show();
                 }
-                else{
-                    inputPassword1.setError(getString(R.string.error_invalid_email));
-                    Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_LONG).show();
-                }
-
 
 
 
