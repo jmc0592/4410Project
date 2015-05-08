@@ -58,12 +58,6 @@ public class ListActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         openDB();
         //Listname = (EditText) findViewById(R.id.editText2);
-        /*
-         * Moved to App.java file. fixed app crash issue when pressing back button.
-
-       //Parse.enableLocalDatastore(this);
-       //Parse.initialize(this);
-        */
        // ParseObject testObject = new ParseObject("TestObject");
        // testObject.put("foo", "bar");
        // testObject.saveInBackground();

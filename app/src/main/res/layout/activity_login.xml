@@ -60,6 +60,13 @@
                 android:layout_marginTop="16dp" android:text="@string/action_register"
                 android:textStyle="bold"
                 android:background="#fffeff5c" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Skip Login"
+                android:id="@+id/skip_button"
+                android:background="#fffeff5c" />
 
             <Space
                 android:layout_width="415dp"
@@ -75,14 +82,6 @@
     <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_marginBottom="8dp" android:visibility="gone" />
-
-    <Button
-        android:layout_width="13dp"
-        android:layout_height="wrap_content"
-        android:text="Test Purposes"
-        android:id="@+id/skip_button"
-        android:layout_gravity="right"
-        android:background="#ffff5c40" />
 
 </LinearLayout>
 
