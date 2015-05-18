@@ -74,17 +74,28 @@ public class ListsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //creates new activity when an item is clicked
                 Intent intent = new Intent(getActivity(), CreateListActivity.class);
-                intent.putExtra("ID",id);
+                intent.putExtra("ID", id);
                 startActivity(intent);//added this back to it goes to activity
                 updateItem(id);
-               // ShowCurrentUser();
-               // displayToast(id);
-               //toParse(id); //Adds the Row in the "list" table to Parse
+                // ShowCurrentUser();
+                // displayToast(id);
+                //toParse(id); //Adds the Row in the "list" table to Parse
 
             }
 
 
         });
+
+        //long click delete
+        mylist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                dbhelper.deleteRow(id);
+                ((ListActivity)getActivity()).populatelistview();//repopulate listview
+                return true;
+            }
+        });
+
         return rootView;
     }
     //not used...for now

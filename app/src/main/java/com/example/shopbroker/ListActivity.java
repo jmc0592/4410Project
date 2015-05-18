@@ -168,6 +168,7 @@ public class ListActivity extends ActionBarActivity
         //String list = Listname.getText().toString();
         if(!TextUtils.isEmpty(Listname.getText().toString())){
           myDb.insertRow(Listname.getText().toString(),date);
+            Listname.setText("");
         }
         //long newId = myDb.insertRow("<List>",date);
         populatelistview();
