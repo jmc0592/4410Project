@@ -1,5 +1,5 @@
 #User-specific configurations
-.idea/libraries/
+.idea/
 app/app.iml
 *.iml
 
