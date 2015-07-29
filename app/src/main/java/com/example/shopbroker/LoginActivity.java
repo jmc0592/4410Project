@@ -139,20 +139,21 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mEmailRegistrationButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                registration();///////////////////////////////////////////////////////////////registration
+                registration();
             }
         });
-/////////////////////////////////////Test skip button for testing purposes
+
+        //Allow user to skip sign in
         Button skip = (Button) findViewById(R.id.skip_button);
         skip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "You did not log in.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "You did not log in.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, ListActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
-///////////////////////////////////////////end of temp skip button
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -525,7 +526,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                                 } else {
                                     // Sign up didn't succeed. Look at the ParseException
                                     // to figure out what went wrong
-                                    //inputEmail.setError(getString(R.string.error_invalid_email));
                                     inputEmail.setError(getString(R.string.error_invalid_email));
                                     Toast.makeText(getApplicationContext(), "Username is already in use.", Toast.LENGTH_LONG).show();
                                 }
@@ -580,9 +580,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             }
         });
 
-        AlertDialog myAlert=alert.create();
-        myAlert.show();
-        //alert.show();
+        alert.show();
 
     }
 

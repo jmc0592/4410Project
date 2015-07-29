@@ -1,37 +1,23 @@
 package com.example.shopbroker;
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -49,6 +35,7 @@ public class CreateListActivity extends ActionBarActivity {
     private float totalPrice = 0.00f;
     private String shared;
     private boolean priceFound = false;
+    public static final String TAG = "CreateListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,12 +249,13 @@ public class CreateListActivity extends ActionBarActivity {
             for(int i =0 ; i<objectid.size(); i++){
                final String s = objectid.get(i);
                ParseUser user = userquery.get(s);
-               //String w = user.getString("username");
-               //Toast.makeText(getApplicationContext(),w,Toast.LENGTH_SHORT).show();
+               String w = user.getString("username");
+               Toast.makeText(getApplicationContext(),w,Toast.LENGTH_SHORT).show();
                relation.add(user);
 
             }
-            relation.add(currentUser);
+            if (currentUser != null)
+                relation.add(currentUser);
             Cursor cursor1 = dbhelper.getRow(rowID);//get row from current rowID
             String listName = cursor1.getString(DBAdapter.COL_NAME);
             parseObj.put("listName", listName);
@@ -296,7 +284,7 @@ public class CreateListActivity extends ActionBarActivity {
         totalPrice = 0.00f;
 
         cur.moveToFirst();
-        while (cur.isAfterLast() == false) {
+        while (!cur.isAfterLast()) {
             total = cur.getString(cur.getColumnIndex("price"));
             if(total.equals("Price not found."))
                 totalPrice += 0.00f;

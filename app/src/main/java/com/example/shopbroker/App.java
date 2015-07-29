@@ -8,11 +8,15 @@ import com.parse.ParseException;
 import com.parse.ParsePush;
 import com.parse.SaveCallback;
 
-//needed to resolve app crash
+/*
+ * Needed to prevent Parse from being loaded every time an activity is created. Set once so it
+ * doesn't cause any issues.
+ */
 public class App extends Application{
     public void onCreate() {
         Parse.enableLocalDatastore(this);
-        Parse.initialize(this);//uses string values from strings.xml
+        //uses string values from strings.xml
+        Parse.initialize(this);
         /*
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
