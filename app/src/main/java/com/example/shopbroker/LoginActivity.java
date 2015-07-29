@@ -148,8 +148,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         skip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "You did not log in.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+
+                Toast.makeText(getApplicationContext(), "You did not log in.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -446,7 +447,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             public void done(ParseUser parseUser, com.parse.ParseException e) {
                 if (parseUser != null && e == null) {// if user exists and no exception found
                     Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else if (parseUser == null) {//if there is no user. say username or password is invalid to not give hints for security reasons
                     Toast.makeText(getApplicationContext(), "Username/password invalid.", Toast.LENGTH_LONG).show();

@@ -18,7 +18,7 @@ public class Splashscreen extends ActionBarActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            Intent intent = new Intent(Splashscreen.this, ListActivity.class);
+            Intent intent = new Intent(Splashscreen.this, MainActivity.class);
             startActivity(intent);
         } else {
             // show the signup or login screen

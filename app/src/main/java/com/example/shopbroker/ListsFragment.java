@@ -31,7 +31,7 @@ public class ListsFragment extends Fragment {
     private SimpleCursorAdapter myCursorAdapter;
     private static final String ARG_SECTION_NUMBER = "section_number";
     Context ctx = getActivity();
-    ListActivity listAc = new ListActivity();
+    MainActivity listAc = new MainActivity();
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -46,7 +46,7 @@ public class ListsFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((ListActivity) activity).onSectionAttached(
+        ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
     public ListsFragment() {
@@ -91,7 +91,7 @@ public class ListsFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 dbhelper.deleteRow(id);
-                ((ListActivity)getActivity()).populatelistview();//repopulate listview
+                ((MainActivity)getActivity()).populatelistview();//repopulate listview
                 return true;
             }
         });

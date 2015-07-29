@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class ListActivity extends ActionBarActivity
+public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks{
     DBAdapter myDb;
     EditText Listname;

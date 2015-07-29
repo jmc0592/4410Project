@@ -68,7 +68,7 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((ListActivity) activity).onSectionAttached(
+        ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
     public void onClick(View rootView){

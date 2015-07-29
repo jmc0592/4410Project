@@ -36,18 +36,18 @@
             android:name="com.parse.CLIENT_KEY"
             android:value="@string/parse_client_key" />
         <activity
-            android:name=".ListActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
         <activity
             android:name=".CreateListActivity"
             android:label="@string/title_activity_create_list"
-            android:parentActivityName=".ListActivity"
+            android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.shopbroker.ListActivity" />
+                android:value="com.example.shopbroker.MainActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
